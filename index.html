@@ -163,12 +163,36 @@ iframe{border:0;display:block;float:none !important;clear:both;width:100%}
 <div id="editor" class="editor" contenteditable="true" spellcheck="true" tabindex="0" role="textbox" aria-multiline="true" data-placeholder="✨ Új jegyzet - kezdj írni..."></div>
 
 <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:4px">
-<button class="btn" onclick="newNote()" style="background:#16a34a">✨ Új jegyzet</button><button class="btn" onclick="saveNote()">💾 Mentés</button>
+<button class="btn" onclick="newNote()" style="background:#16a34a">✨ Új jegyzet</button><button class="btn" onclick="saveNote()">💾 Mentés</button><button class="btn" onclick="githubManualSync()" style="background:#7c3aed;border:1px solid #a78bfa">☁️ Mentés GitHub-ra</button><button class="btn" onclick="openGitHubSettings()" style="background:#334155">⚙️ GitHub beállítás</button>
 <button class="btn" onclick="exportWord()">📝 Word</button>
 <button class="btn" onclick="exportHTML()">🌐 HTML</button>
 <button class="btn" onclick="shareNote()">📤 Megosztás</button>
 </div>
 
+
+<div id="githubSettings" style="display:none;margin-top:10px;background:#0b1220;border:1px solid #475569;padding:12px;border-radius:12px">
+  <div style="font-weight:900;margin-bottom:6px">☁️ GitHub automatikus szinkron</div>
+  <div style="font-size:11px;color:#cbd5e1;line-height:1.45;margin-bottom:8px">
+    Egyszer kell beállítani. A jegyzetek a GitHub repositoryban egy külön <b>v26-notes.json</b> fájlba kerülnek.
+    A GitHub Personal Access Token csak ezen az eszközön, a böngésző helyi tárhelyén lesz tárolva.
+    Csak olyan finomhangolt tokent használj, amely kizárólag ehhez az egy repositoryhoz ad <b>Contents: Read and write</b> jogosultságot.
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+    <input id="ghOwner" value="imregabor323-arch" placeholder="GitHub felhasználó / szervezet" style="padding:8px;border-radius:7px;border:1px solid #475569;background:#111827;color:#fff">
+    <input id="ghRepo" value="UltraV26" placeholder="Repository neve" style="padding:8px;border-radius:7px;border:1px solid #475569;background:#111827;color:#fff">
+    <input id="ghBranch" value="main" placeholder="Branch (pl. main)" style="padding:8px;border-radius:7px;border:1px solid #475569;background:#111827;color:#fff">
+    <input id="ghPath" value="v26-notes.json" value="v26-notes.json" placeholder="Fájl útvonala" style="padding:8px;border-radius:7px;border:1px solid #475569;background:#111827;color:#fff">
+  </div>
+  <input id="ghToken" type="password" autocomplete="off" placeholder="GitHub Fine-grained PAT — Contents: Read and write" style="width:100%;box-sizing:border-box;margin-top:6px;padding:8px;border-radius:7px;border:1px solid #475569;background:#111827;color:#fff">
+  <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:7px">
+    <button class="btn" onclick="saveGitHubSettings()" style="background:#16a34a">💾 Beállítás mentése</button>
+    <button class="btn" onclick="githubManualSync()" style="background:#7c3aed">☁️ Most szinkronizál</button>
+    <button class="btn" onclick="loadFromGitHub(true)" style="background:#0369a1">🔄 GitHub → készülék</button>
+    <button class="btn" onclick="clearGitHubSettings()" style="background:#991b1b">🗑️ Kapcsolat törlése</button>
+    <button class="btn" onclick="document.getElementById('githubSettings').style.display='none'">✖️ Bezár</button>
+  </div>
+  <div id="githubStatus" style="font-size:11px;margin-top:7px;color:#94a3b8">GitHub: nincs beállítva.</div>
+</div>
 <div id="aiBox" style="display:none;margin-top:10px;background:#1f2937;padding:10px;border-radius:10px">
 <b>🤖 Saját AI</b> - mit segítsen?<br>
 <input id="aiInput" style="width:70%;padding:6px;border-radius:6px" placeholder="pl: bővítsd ki, foglald össze, tegyél hozzá rubrikát">
@@ -964,6 +988,15 @@ function shareNote(){const ed=document.getElementById('editor');const title=note
 let notes=JSON.parse(localStorage.getItem('v26fix')||'[]');
 let currentEditId=null;
 let autoSaveTimer=null;
+let githubSyncTimer=null;
+let githubSyncBusy=false;
+let githubEditorDirty=false;
+let githubPollTimer=null;
+let githubLastSha=null;
+let githubLastRemoteUpdated=0;
+const GITHUB_CONFIG_KEY='v26githubConfig';
+const GITHUB_DATA_VERSION=1;
+
 function notePlainText(html){const d=document.createElement('div');d.innerHTML=html||'';return (d.innerText||d.textContent||'').replace(/\s+/g,' ').trim();}
 function makeNoteTitle(html){return notePlainText(html).slice(0,45)||'Jegyzet';}
 function dateText(ts){return new Date(ts||Date.now()).toLocaleString('hu-HU',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});}
@@ -973,17 +1006,158 @@ function upsertCurrentNote(){
   if(currentEditId){const idx=notes.findIndex(x=>String(x.id)===String(currentEditId));if(idx>-1){notes[idx].content=c;notes[idx].title=makeNoteTitle(c);notes[idx].updated=now;notes[idx].color=ed.style.background||notes[idx].color||'#0f0f23';return notes[idx];}}
   const n={id:now,title:makeNoteTitle(c),content:c,created:now,updated:now,color:ed.style.background||'#0f0f23'};notes.unshift(n);currentEditId=n.id;return n;
 }
-function saveNoteAuto(){const n=upsertCurrentNote();if(n){persistNotes();localStorage.setItem('v26auto',JSON.stringify(n));}return n;}
+function getGitHubConfig(){
+  try{
+    let cfg=JSON.parse(localStorage.getItem(GITHUB_CONFIG_KEY)||'null');
+    if(!cfg || !cfg.owner || !cfg.repo){
+      // alapértelmezett repo - neked nem kell semmit beírni
+      const token = (cfg && cfg.token) ? cfg.token : (localStorage.getItem('v26_gh_token')||'');
+      cfg = {owner:'imregabor323-arch', repo:'UltraV26', branch:(cfg&&cfg.branch)||'main', path:(cfg&&cfg.path)||'v26-notes.json', token: token};
+      if(token) localStorage.setItem(GITHUB_CONFIG_KEY, JSON.stringify(cfg));
+    }
+    // token külön kulcsból is átvétele
+    if(cfg && !cfg.token){
+      const t=localStorage.getItem('v26_gh_token');
+      if(t) cfg.token=t;
+    }
+    return cfg;
+  }catch(e){return {owner:'imregabor323-arch', repo:'UltraV26', branch:'main', path:'v26-notes.json', token: localStorage.getItem('v26_gh_token')||''};}
+}
+function setGitHubStatus(msg,ok=false){const el=document.getElementById('githubStatus');if(el){el.textContent=msg;el.style.color=ok?'#86efac':'#fbbf24';}}
+function saveNoteAuto(){
+  const n=upsertCurrentNote();
+  if(n){
+    persistNotes();
+    localStorage.setItem('v26auto',JSON.stringify(n));
+    scheduleGitHubSync();
+  }
+  return n;
+}
+function scheduleGitHubSync(){
+  clearTimeout(githubSyncTimer);
+  const cfg=getGitHubConfig();
+  if(!cfg||!cfg.token||!cfg.owner||!cfg.repo)return;
+  githubSyncTimer=setTimeout(()=>githubSync(false),1200);
+}
+function saveBeforeLeave(){
+  try{
+    const n=saveNoteAuto();
+    if(n && getGitHubConfig()) githubSync(true);
+  }catch(e){}
+}
+function openGitHubSettings(){
+  const box=document.getElementById('githubSettings'); if(!box)return;
+  const c=getGitHubConfig()||{};
+  const fieldMap={ghOwner:'owner',ghRepo:'repo',ghBranch:'branch',ghPath:'path'}; Object.keys(fieldMap).forEach(id=>{const el=document.getElementById(id);const key=fieldMap[id];if(el&&c[key]!=null)el.value=c[key];});
+  const tok=document.getElementById('ghToken'); if(tok)tok.value=c.token||'';
+  box.style.display=box.style.display==='none'?'block':'none';
+  if(box.style.display==='block') setGitHubStatus(c.token?'GitHub: beállítva — automatikus szinkron aktív.':'GitHub: nincs beállítva.');
+}
+function saveGitHubSettings(){
+  const c={owner:document.getElementById('ghOwner').value.trim(),repo:document.getElementById('ghRepo').value.trim(),branch:(document.getElementById('ghBranch').value.trim()||'main'),path:(document.getElementById('ghPath').value.trim()||'v26-notes.json'),token:document.getElementById('ghToken').value.trim()};
+  if(!c.owner||!c.repo||!c.token){setGitHubStatus('❗ Add meg a GitHub felhasználót, repositoryt és a tokent.');return;}
+  localStorage.setItem(GITHUB_CONFIG_KEY,JSON.stringify(c));
+  startGitHubPolling();
+  setGitHubStatus('GitHub: beállítás elmentve — automatikus szinkron aktív. Minden eszközön szinkronizál!',true);
+  localStorage.setItem('v26_gh_token', c.token);
+  setTimeout(()=>{ const box=document.getElementById('githubSettings'); if(box) box.style.display='none'; }, 1200);
+
+  githubSync(false);
+}
+function clearGitHubSettings(){localStorage.removeItem(GITHUB_CONFIG_KEY);githubLastSha=null;clearInterval(githubPollTimer);setGitHubStatus('GitHub: kapcsolat törölve.');}
+function githubApiUrl(c){return `https://api.github.com/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/contents/${c.path.split('/').map(encodeURIComponent).join('/')}?ref=${encodeURIComponent(c.branch)}`;}
+function githubHeaders(c){return {'Accept':'application/vnd.github+json','Authorization':'Bearer '+c.token,'X-GitHub-Api-Version':'2022-11-28','Content-Type':'application/json'};}
+function bytesToBase64Utf8(text){
+  const bytes=new TextEncoder().encode(text); let bin=''; for(let i=0;i<bytes.length;i+=0x8000)bin+=String.fromCharCode(...bytes.subarray(i,i+0x8000)); return btoa(bin);
+}
+function base64ToUtf8(b64){
+  const bin=atob(b64.replace(/\n/g,'')); const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0)); return new TextDecoder().decode(bytes);
+}
+function githubPayload(){
+  return JSON.stringify({version:GITHUB_DATA_VERSION,updated:Date.now(),notes:notes.map(n=>({id:n.id,title:n.title,content:n.content,created:n.created,updated:n.updated,color:n.color||'#0f0f23'}))},null,2);
+}
+async function githubRead(){
+  const c=getGitHubConfig(); if(!c)return null;
+  const r=await fetch(githubApiUrl(c),{headers:githubHeaders(c),cache:'no-store'});
+  if(r.status===404)return {sha:null,data:null};
+  if(!r.ok)throw new Error('GitHub olvasási hiba: HTTP '+r.status);
+  const j=await r.json(); return {sha:j.sha,data:JSON.parse(base64ToUtf8(j.content||''))};
+}
+async function githubSync(force=false){
+  const c=getGitHubConfig(); if(!c||githubSyncBusy)return false;
+  githubSyncBusy=true;
+  try{
+    const remote=await githubRead();
+    const localUpdated=Math.max(0,...notes.map(n=>Number(n.updated)||0));
+    const remoteUpdated=Number(remote?.data?.updated)||0;
+    if(!force && remote?.data && remoteUpdated>localUpdated){
+      notes=Array.isArray(remote.data.notes)?remote.data.notes:[];
+      localStorage.setItem('v26fix',JSON.stringify(notes)); renderNotes(); githubLastSha=remote.sha; githubLastRemoteUpdated=remoteUpdated;
+      setGitHubStatus('☁️ GitHub → készülék: frissebb adat betöltve.',true); return true;
+    }
+    const body={message:'V26 automatikus jegyzet-szinkron',content:bytesToBase64Utf8(githubPayload()),branch:c.branch};
+    if(remote?.sha)body.sha=remote.sha;
+    const r=await fetch(githubApiUrl(c),{method:'PUT',headers:githubHeaders(c),body:JSON.stringify(body)});
+    if(!r.ok){let msg='HTTP '+r.status;try{const x=await r.json();if(x.message)msg+= ' — '+x.message;}catch(e){}throw new Error(msg);}
+    const out=await r.json(); githubLastSha=out.content?.sha||null; githubLastRemoteUpdated=Date.now();
+    githubEditorDirty=false; setGitHubStatus('☁️ GitHub: automatikusan szinkronizálva '+new Date().toLocaleTimeString('hu-HU'),true); return true;
+  }catch(e){
+    setGitHubStatus('⚠️ GitHub szinkron hiba: '+e.message);
+    console.error(e); return false;
+  }finally{githubSyncBusy=false;}
+}
+async function githubManualSync(){
+  const n=saveNoteAuto(); if(!n){alert('Üres a jegyzet, írj valamit!');return;}
+  if(!getGitHubConfig()){openGitHubSettings();setGitHubStatus('❗ Előbb állítsd be a GitHub kapcsolatot.');return;}
+  const ok=await githubSync(true); if(ok)alert('☁️ A jegyzetek felkerültek GitHubra.');
+}
+async function loadFromGitHub(showAlert=false){
+  const c=getGitHubConfig(); if(!c){openGitHubSettings();return false;}
+  try{
+    const remote=await githubRead();
+    if(!remote?.data||!Array.isArray(remote.data.notes)){setGitHubStatus('GitHub: még nincs v26-notes.json, az első mentés létrehozza.',true);return false;}
+    const localUpdated=Math.max(0,...notes.map(n=>Number(n.updated)||0)), remoteUpdated=Number(remote.data.updated)||0;
+    if(remoteUpdated>=localUpdated){
+      notes=remote.data.notes; localStorage.setItem('v26fix',JSON.stringify(notes)); renderNotes(); githubLastSha=remote.sha; githubLastRemoteUpdated=remoteUpdated;
+      setGitHubStatus('🔄 GitHub → készülék: szinkronizálva.',true);
+      if(showAlert)alert('🔄 A GitHubon lévő jegyzetek betöltve.');
+      return true;
+    }
+    setGitHubStatus('Helyi adatok frissebbek; nem írtam felül őket.',true); return false;
+  }catch(e){setGitHubStatus('⚠️ GitHub betöltési hiba: '+e.message);if(showAlert)alert('GitHub betöltési hiba: '+e.message);return false;}
+}
+async function githubPoll(){
+  const c=getGitHubConfig();
+  if(!c||githubSyncBusy||githubEditorDirty)return;
+  try{
+    const remote=await githubRead();
+    if(!remote?.data||!Array.isArray(remote.data.notes))return;
+    const remoteUpdated=Number(remote.data.updated)||0;
+    const localUpdated=Math.max(0,...notes.map(n=>Number(n.updated)||0));
+    if(remoteUpdated>localUpdated){
+      notes=remote.data.notes; localStorage.setItem('v26fix',JSON.stringify(notes)); renderNotes();
+      githubLastSha=remote.sha; githubLastRemoteUpdated=remoteUpdated;
+      setGitHubStatus('🔄 GitHub: új változás érkezett — frissítve.',true);
+    }
+  }catch(e){console.warn('GitHub automatikus frissítés:',e.message);}
+}
+
+// Extra automata mentés minden 12 mp-ben, ha van változás
+setInterval(()=>{ if(getGitHubConfig()?.token && githubEditorDirty){ saveNoteAuto(); } }, 12000);
+
+function startGitHubPolling(){
+  clearInterval(githubPollTimer);
+  if(getGitHubConfig()) githubPollTimer=setInterval(githubPoll,15000);
+}
 function scheduleAutoSave(){clearTimeout(autoSaveTimer);autoSaveTimer=setTimeout(()=>saveNoteAuto(),350);}
-function saveBeforeLeave(){try{saveNoteAuto();}catch(e){}}
-document.addEventListener('input',e=>{if(e.target&&e.target.id==='editor')scheduleAutoSave();});
+document.addEventListener('input',e=>{if(e.target&&e.target.id==='editor'){githubEditorDirty=true;scheduleAutoSave();}});
 document.addEventListener('blur',e=>{if(e.target&&e.target.id==='editor')saveNoteAuto();},true);
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')saveBeforeLeave();});
 window.addEventListener('pagehide',saveBeforeLeave);window.addEventListener('beforeunload',saveBeforeLeave);
 function newNote(){saveNoteAuto();const ed=document.getElementById('editor');ed.innerHTML='';ed.dataset.pageColor='#0f0f23';ed.style.background='#0f0f23';ed.style.color='#e5e7eb';ed.classList.add('dark');ed.classList.remove('light');currentEditId=null;ed.focus();}
 function saveNote(){const n=saveNoteAuto();if(!n){alert('Üres a jegyzet, írj valamit!');return;}alert('💾 Jegyzet mentve: '+n.title+'\n📅 '+dateText(n.updated));}
 function openSavedNote(id){const n=notes.find(x=>String(x.id)===String(id));if(!n)return;const ed=document.getElementById('editor');ed.innerHTML=n.content;currentEditId=n.id;if(n.color)ed.style.background=n.color;ed.focus();}
-function deleteSavedNote(id){const n=notes.find(x=>String(x.id)===String(id));if(!n)return;if(confirm('Biztosan törlöd ezt a jegyzetet?\n\n'+n.title)){notes=notes.filter(x=>String(x.id)!==String(id));localStorage.setItem('v26fix',JSON.stringify(notes));if(String(currentEditId)===String(id)){currentEditId=null;document.getElementById('editor').innerHTML='';}renderNotes();}}
+function deleteSavedNote(id){const n=notes.find(x=>String(x.id)===String(id));if(!n)return;if(confirm('Biztosan törlöd ezt a jegyzetet?\n\n'+n.title)){notes=notes.filter(x=>String(x.id)!==String(id));localStorage.setItem('v26fix',JSON.stringify(notes));if(String(currentEditId)===String(id)){currentEditId=null;document.getElementById('editor').innerHTML='';}renderNotes();scheduleGitHubSync();}}
 function shareSavedNote(id){const n=notes.find(x=>String(x.id)===String(id));if(!n)return;const text=notePlainText(n.content);if(navigator.share)navigator.share({title:n.title,text:text}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(text).then(()=>alert('📋 A jegyzet szövege a vágólapra került.'));else alert(text);}
 function printSavedNote(id){const n=notes.find(x=>String(x.id)===String(id));if(!n)return;const w=window.open('','_blank');if(!w){alert('A nyomtatási ablakot a böngésző blokkolta.');return;}w.document.write(`<!doctype html><html lang="hu"><head><meta charset="utf-8"><title>${escapeHtml(n.title)}</title><style>body{font-family:Arial,sans-serif;padding:30px;color:#111}h1{font-size:24px}small{color:#666}.content{line-height:1.6}</style></head><body><h1>${escapeHtml(n.title)}</h1><small>${dateText(n.updated)}</small><hr><div class="content">${n.content}</div></body></html>`);w.document.close();w.focus();setTimeout(()=>w.print(),250);}
 function escapeHtml(x){return String(x||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
@@ -992,7 +1166,40 @@ function renderNotes(){const list=document.getElementById('notesList');if(!list)
 let notePressTimer=null;
 document.addEventListener('pointerdown',e=>{const el=e.target.closest('.saved-note');if(!el||e.target.closest('button'))return;clearTimeout(notePressTimer);notePressTimer=setTimeout(()=>showNoteActions(el.dataset.id),550);});
 document.addEventListener('pointerup',()=>clearTimeout(notePressTimer));document.addEventListener('pointercancel',()=>clearTimeout(notePressTimer));
+
+// --- AUTO GITHUB BEÁLLÍTÁS - NEKED NEM KELL SEMMIT CSINÁLNOD ---
+(function autoGitHubSetup(){
+  const cfg = getGitHubConfig();
+  const hasToken = cfg && cfg.token && cfg.token.length>10;
+  if(hasToken){
+    console.log('✅ GitHub token megvan, automata szinkron indul');
+    // githubSettings elrejtése
+    setTimeout(()=>{ const b=document.getElementById('githubSettings'); if(b) b.style.display='none'; }, 800);
+  }else{
+    // ha nincs token, automatikusan felhozza a beállítást 1.5 mp után, hogy csak be kelljen illeszteni
+    setTimeout(()=>{
+      const box=document.getElementById('githubSettings');
+      if(box){ box.style.display='block'; box.style.borderColor='#22c55e'; 
+        const st=document.getElementById('githubStatus');
+        if(st){ st.innerHTML='👉 <b>Egyszeri beállítás:</b> Illeszd be a GitHub tokent, utána minden automatikus lesz minden eszközön.<br><a href="https://github.com/settings/tokens/new?description=UltraV26Auto&scopes=repo" target="_blank" style="color:#4ade80">🔑 Token létrehozása (katt ide) →</a>'; st.style.color='#86efac'; }
+        const ownerEl=document.getElementById('ghOwner'); if(ownerEl) ownerEl.value='imregabor323-arch';
+        const repoEl=document.getElementById('ghRepo'); if(repoEl) repoEl.value='UltraV26';
+      }
+    }, 1500);
+  }
+  // token mentésekor v26_gh_token is mentődjön
+  const origSave = window.saveGitHubSettings;
+  window.saveGitHubSettings = function(){
+    const tokEl=document.getElementById('ghToken');
+    if(tokEl && tokEl.value.trim()){
+      localStorage.setItem('v26_gh_token', tokEl.value.trim());
+    }
+    return origSave.apply(this, arguments);
+  };
+})();
+
 renderNotes();
+setTimeout(()=>{const c=getGitHubConfig();if(c){const box=document.getElementById('githubSettings');if(box)box.style.display='none';startGitHubPolling();loadFromGitHub(false);}},700);
 
 // FIX MENU & KOCKA - biztos működés
 // Törlés mód - ha véletlenül beszúrtál képet/rubrikát
