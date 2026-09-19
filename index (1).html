@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head><style>
+@font-face {
+  font-family: "Optimistic";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Optimistic Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
+}
+:where(html) {
+  font-family: "Optimistic", system-ui, sans-serif;
+}
+:where(code, pre, kbd, samp) {
+  font-family: "Optimistic Mono", ui-monospace, monospace;
+}
+
+.bible-library-modal{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:220;display:none;align-items:center;justify-content:center;padding:12px}.bible-library-modal.open{display:flex}.bible-library-box{width:min(1100px,98vw);max-height:94vh;overflow:auto;background:#0b1220;border:1px solid #334155;border-radius:18px;padding:16px;color:#f8fafc}.bible-section-title{font-size:18px;font-weight:900;margin:12px 0 8px;color:#93c5fd}.bible-book-grid,.bible-chapter-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:8px}.bible-book,.bible-chapter{border:1px solid #334155;background:#172033;color:#fff;border-radius:12px;padding:11px 8px;text-align:center;cursor:pointer;font-weight:800;min-height:58px}.bible-book:hover,.bible-chapter:hover{background:#1e3a5f;border-color:#60a5fa;transform:translateY(-1px)}.bible-book small{display:block;opacity:.65;font-size:10px;margin-top:3px}.bible-reader{max-width:900px;width:min(96vw,900px);max-height:94vh;overflow:auto;background:#f8fafc;color:#111827;border-radius:18px;padding:18px}.bible-reader.dark{background:#0f172a;color:#e5e7eb}.bible-verse{padding:8px 6px;border-bottom:1px solid rgba(100,116,139,.22);line-height:1.65}.bible-verse b{color:#2563eb;margin-right:6px}.bible-controls{display:flex;gap:6px;flex-wrap:wrap;align-items:center;position:sticky;top:0;background:inherit;padding-bottom:10px;z-index:2}.bible-offline-progress{height:8px;background:#1e293b;border-radius:9px;overflow:hidden;margin:8px 0}.bible-offline-progress i{display:block;height:100%;width:0;background:#22c55e;transition:width .2s}.bible-ref{user-select:text}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ultra V26 Notice - FIX</title>
+<style>
+html,body{margin:0;width:100vw;min-height:100dvh;background:#0a0a1a;color:#fff;overflow-x:hidden;font-family:system-ui,-apple-system}
+#uni{position:fixed;inset:0;width:100vw;height:100dvh;background:radial-gradient(ellipse at 50% 45%,#151b46 0%,#080b22 38%,#02030d 72%,#000 100%);z-index:0}
+#universeGlow{position:fixed;inset:-25%;z-index:1;pointer-events:none;background:radial-gradient(circle at 50% 50%,rgba(91,80,180,.18),transparent 30%),radial-gradient(circle at 20% 25%,rgba(35,125,190,.12),transparent 25%),radial-gradient(circle at 80% 70%,rgba(180,55,150,.10),transparent 24%);filter:blur(20px);animation:cosmicPulse 8s ease-in-out infinite alternate}
+#cubeWrap{position:fixed;left:50%;top:50%;width:150px;height:150px;z-index:15;cursor:pointer;transform:translate(-50%,-50%);perspective:900px;transform-style:preserve-3d;animation:cubeFloat 5s ease-in-out infinite}
+#cube{width:100%;height:100%;position:relative;transform-style:preserve-3d;animation:spin 11s linear infinite;filter:drop-shadow(0 0 22px rgba(0,0,0,.95)) drop-shadow(0 0 22px rgba(112,91,220,.55));will-change:transform}
+#cube .face{position:absolute;width:150px;height:150px;background:linear-gradient(145deg,#32323d 0%,#171720 42%,#09090e 100%);border:1px solid rgba(190,190,205,.25);border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:17px;color:#d8d8df;letter-spacing:.6px;box-shadow:inset 0 2px 5px rgba(255,255,255,.12),inset 0 -20px 35px rgba(0,0,0,.85),inset 0 0 0 1px rgba(255,255,255,.035);backface-visibility:hidden;-webkit-backface-visibility:hidden;text-transform:uppercase}
+#cube .face.v26{background:linear-gradient(145deg,#383844,#181820 55%,#08080d);color:#dedee8;border-color:rgba(220,220,235,.32);font-size:30px;text-shadow:0 2px 9px rgba(0,0,0,.95);letter-spacing:1.5px}
+#cube .front{transform:rotateY(0) translateZ(75px)}
+#cube .back{transform:rotateY(180deg) translateZ(75px)}
+#cube .right{transform:rotateY(90deg) translateZ(75px)}
+#cube .left{transform:rotateY(-90deg) translateZ(75px)}
+#cube .top{transform:rotateX(90deg) translateZ(75px)}
+#cube .bottom{transform:rotateX(-90deg) translateZ(75px)}
+#cubeWrap:before,#cubeWrap:after{content:"";position:absolute;left:50%;top:50%;border:1px solid rgba(145,125,255,.24);border-radius:50%;pointer-events:none;transform-style:preserve-3d}
+#cubeWrap:before{width:285px;height:92px;transform:translate(-50%,-50%) rotateX(68deg);box-shadow:0 0 22px rgba(113,91,240,.12);animation:orbitA 9s linear infinite}
+#cubeWrap:after{width:92px;height:285px;transform:translate(-50%,-50%) rotateY(68deg);box-shadow:0 0 22px rgba(91,145,240,.10);animation:orbitB 13s linear infinite reverse}
+@keyframes cubeFloat{0%,100%{margin-top:0}50%{margin-top:-9px}}
+@keyframes spin{from{transform:rotateX(12deg) rotateY(0deg) rotateZ(0deg)}to{transform:rotateX(372deg) rotateY(360deg) rotateZ(12deg)}}
+@keyframes orbitA{to{transform:translate(-50%,-50%) rotateX(68deg) rotateZ(360deg)}}
+@keyframes orbitB{to{transform:translate(-50%,-50%) rotateY(68deg) rotateZ(-360deg)}}
+@keyframes cosmicPulse{from{opacity:.55;transform:scale(.98) rotate(0deg)}to{opacity:1;transform:scale(1.04) rotate(4deg)}}
+#title{position:fixed;left:50%;top:calc(50% + 155px);transform:translateX(-50%);z-index:5;text-align:center;pointer-events:none;width:92vw}
+#title h1{font-size:clamp(24px,6vw,52px);margin:0 0 6px;background:linear-gradient(90deg,#c4b5fd,#e9d5ff,#93c5fd);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 5px 30px rgba(0,0,0,.65);letter-spacing:1px}
+#title p{margin:0;color:rgba(225,225,240,.72);font-size:13px;letter-spacing:1.5px}
+@media(max-width:600px){#cubeWrap{width:118px;height:118px}#cube .face{width:118px;height:118px}#cube .front{transform:rotateY(0) translateZ(59px)}#cube .back{transform:rotateY(180deg) translateZ(59px)}#cube .right{transform:rotateY(90deg) translateZ(59px)}#cube .left{transform:rotateY(-90deg) translateZ(59px)}#cube .top{transform:rotateX(90deg) translateZ(59px)}#cube .bottom{transform:rotateX(-90deg) translateZ(59px)}#title{top:calc(50% + 130px)}}
+@media(prefers-reduced-motion:reduce){#cube,#cubeWrap:before,#cubeWrap:after,#universeGlow{animation:none!important}}
+#menuBtn{position:fixed;right:14px;top:14px;z-index:20;padding:11px 16px;border-radius:12px;border:0;background:#fff;color:#000;font-weight:700;cursor:pointer}
+#superMenu{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.72);backdrop-filter:blur(18px);display:none;overflow:auto;padding:14px}
+#superMenu.open{display:block}
+.panel{max-width:980px;margin:20px auto;background:#111827;border-radius:18px;padding:16px;border:1px solid #2a2a4a}
+.btn{padding:8px 12px;border-radius:9px;border:0;background:#23234a;color:#fff;margin:3px;cursor:pointer;font-size:13px}
+.btn:active{transform:scale(.96)}
+.editor{width:100%;min-height:360px;background:var(--page,#0f0f23);border:1px solid #333;border-radius:12px;padding:14px;color:#e5e7eb;outline:none;line-height:1.6;transition:background .3s,color .3s}
+.editor.light{color:#111827 !important}
+.editor.dark{color:#e5e7eb !important}
+.editor:empty:before{content:attr(data-placeholder);color:#6b7280;pointer-events:none}
+.editor:focus{border-color:#8b5cf6;box-shadow:0 0 0 3px rgba(139,92,246,.25)}
+.mini-img{width:130px;height:130px;object-fit:cover;border-radius:10px;cursor:pointer;border:1.5px solid #555;float:left;margin:6px 12px 8px 0;transition:.25s;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.mini-img.right{float:right;margin:6px 0 8px 12px}
+.mini-img:hover{transform:scale(1.05);box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.mini-img{position:relative}
+.mini-img.selected{outline:2px solid #fbbf24}
+.mini-img.full{width:100% !important;height:auto !important;max-height:70vh;float:none !important;display:block;margin:12px auto !important;cursor:zoom-out;box-shadow:0 8px 30px rgba(0,0,0,.6)} .clear{clear:both}
+.bible-ref{color:#60a5fa;background:#0f172a;border-bottom:1px dashed #3b82f6;padding:0 4px;border-radius:4px;cursor:pointer;font-weight:600}
+.bible-ref:hover{background:#1e293b}
+.rubrika{font-size:11px;padding:4px 8px;border-radius:6px;margin:6px 0;display:inline-block;font-weight:700;letter-spacing:.3px;cursor:text;transition:.2s}
+.rubrika.blue{background:#1e3a8a;color:#93c5fd;border-left:3px solid #3b82f6}
+.rubrika.red{background:#7f1d1d;color:#fca5a5;border-left:3px solid #ef4444}
+.rubrika.green{background:#14532d;color:#86efac;border-left:3px solid #22c55e}
+/* UJ KIS KERETEZETT TEGLALAP RUBRIKA - APRÓ BETŰS */
+.rubrika-box{border:2.5px solid #3b82f6;border-radius:10px;padding:10px 12px;margin:10px 4px;display:inline-block;min-width:180px;max-width:92%;min-height:55px;background:rgba(59,130,246,.1);position:relative;vertical-align:top;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.rubrika-box.blue{border-color:#3b82f6;background:rgba(30,58,138,.3)}
+.rubrika-box.red{border-color:#ef4444;background:rgba(127,29,29,.3)}
+.rubrika-box.green{border-color:#22c55e;background:rgba(20,83,45,.3)}
+.rubrika-box.yellow{border-color:#f59e0b;background:rgba(120,53,15,.3)}
+.rubrika-box.purple{border-color:#a855f7;background:rgba(59,7,100,.3)}
+.rubrika-box .rubrika-title{font-size:10px;font-weight:900;letter-spacing:.9px;text-transform:uppercase;opacity:.95;display:block;margin-bottom:4px;padding-right:18px}
+.rubrika-box .rubrika-content{font-size:12px;font-weight:600;line-height:1.4;display:block;outline:none;min-width:140px;min-height:20px;word-break:break-word}
+.rubrika-box.tiny .rubrika-content{font-size:9px !important}
+.rubrika-box.small .rubrika-content{font-size:11px}
+.rubrika-box.big .rubrika-content{font-size:14px}
+.rubrika-box:hover{box-shadow:0 4px 14px rgba(59,130,246,.4);transform:translateY(-1px)}
+.rubrika-del{position:absolute;top:4px;right:4px;width:18px;height:18px;background:#991b1b;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;cursor:pointer;line-height:1;opacity:.9;z-index:2}
+.rubrika-del:hover{background:#ef4444;transform:scale(1.15)}
+.rubrika-box.selected{outline:2px solid #fbbf24;box-shadow:0 0 0 3px rgba(251,191,36,.4)}
+.note{padding:10px;border:1px solid #333;border-radius:10px;margin:8px 0;background:#151530;cursor:pointer}.saved-note{user-select:none;-webkit-user-select:none}.saved-note:active{transform:scale(.995);background:#1b1b3d}
+#imgModal{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+#imgModal.open{display:flex}
+#imgModal img{max-width:95vw;max-height:90vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+#bibleModal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:210;display:none;align-items:center;justify-content:center;padding:16px}
+#bibleModal.open{display:flex}
+#bibleBox{max-width:560px;width:100%;max-height:88vh;overflow:hidden;background:#0f172a;border:1px solid #334155;border-radius:16px;padding:18px;box-sizing:border-box}
+iframe{border:0;display:block;float:none !important;clear:both;width:100%}
+#webFrame{float:none !important;display:block;width:100% !important;clear:both;transition:.3s}
+#webFrame.enlarged{position:fixed !important;inset:10px !important;width:auto !important;height:auto !important;z-index:300;background:#fff;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.8)}
+.youtube-embed{float:none !important;display:block;width:100%;max-width:560px;margin:10px 0}
+</style>
+<style id="offlineProgressAnimation">@keyframes offlinePulse{0%{background-position:0% 0}100%{background-position:200% 0}}</style><style id="bible-ref-gold-enhancement">
+.bible-ref{color:#ffd76a!important;text-decoration:none!important;font-weight:800!important;cursor:pointer!important;text-shadow:0 0 5px rgba(255,215,80,.65),0 0 12px rgba(255,190,40,.35);border-bottom:1px solid rgba(255,215,100,.7);padding:0 2px;border-radius:4px;transition:.18s ease;}
+.bible-ref:hover,.bible-ref:active{color:#fff1a6!important;text-shadow:0 0 7px #ffd85a,0 0 16px rgba(255,190,30,.75);background:rgba(255,215,80,.08);}
+.bible-ref::after{content:none!important;display:none!important;}
+.bible-ref{display:inline-flex;align-items:baseline;gap:3px;}
+.bible-ref-text{display:inline;}
+</style></head>
+<body>
+<canvas id="uni"></canvas><div id="universeGlow"></div>
+<div id="cubeWrap" onclick="toggleMenu()"><div id="cube">
+<div class="face front v26">V26</div>
+<div class="face back">V26</div>
+<div class="face right">BIBLIA</div>
+<div class="face left">KÉP</div>
+<div class="face top">JW.org</div>
+<div class="face bottom">AI • Jegyzet</div>
+</div></div>
+<div id="title"><h1>Ultra V26 Notice</h1><p>Élő univerzum • Katt a kockára!</p></div>
+<button id="menuBtn" onclick="toggleMenu()">☰ Menü</button>
+
+<div id="imgModal" onclick="this.classList.remove('open')"><img id="bigImg"></div>
+<div id="bibleModal" onclick="if(event.target.id=='bibleModal') closeBibleModal()"><div id="bibleBox"></div></div>
+<div id="bibleLibraryModal" class="bible-library-modal" onclick="if(event.target.id==='bibleLibraryModal') closeBibleLibrary()"><div id="bibleLibraryBox"></div></div>
+
+<div id="superMenu">
+<div class="panel">
+<h2 style="margin:0 0 8px">🚀 Szuper Jegyzet - V26 FIX</h2>
+
+<div style="display:flex;flex-wrap:wrap;gap:4px;margin:8px 0">
+<button class="btn" onclick="addTinyImage()">🖼️ Kép (130px, kattra teljes)</button>
+<button class="btn" onclick="addFile()">📁 Fájl</button>
+<button class="btn" onclick="document.getElementById('browser').style.display='block'">🌐 Böngésző Wiki+JW+YT</button>
+<button class="btn" onclick="openBibleLibrary()" style="background:#14532d;border:1px solid #22c55e">📖 Teljes Biblia</button>
+<button class="btn" onclick="speakNote()">🔊 Felolvasás</button>
+<button class="btn" onclick="document.getElementById('calc').style.display='block'">🧮 Számoló</button>
+<button class="btn" onclick="document.getElementById('aiBox').style.display='block'">🤖 Saját AI</button>
+<button class="btn" onclick="toggleMenu()">✖️ Bezár</button>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:4px;margin:8px 0;align-items:center">
+<b style="font-size:12px">Formátum:</b>
+<button class="btn" onclick="manualBibleMark()">📖 Biblia jelölés</button><button class="btn" onclick="fmt('bold')"><b>B</b></button>
+<button class="btn" onclick="fmt('italic')"><i>I</i></button>
+<button class="btn" onclick="fmt('underline')"><u>U</u></button>
+<select onchange="fontSize(this.value)" style="padding:6px;border-radius:6px"><option>6</option><option>8</option><option>10</option><option selected>12</option><option>14</option><option>16</option><option>18</option><option>20</option><option>24</option></select>
+<button class="btn" onclick="insertRubrika('blue','big')" style="background:#1e3a8a;border:2px solid #3b82f6;padding:10px 14px;font-weight:800">🔵 NAGY TÉGLALAP RUBRIKA</button><button class="btn" onclick="insertRubrika('blue','tiny')" style="background:#1e3a8a;border:1.5px solid #3b82f6">🔵 8px keretezett rubrika</button><button class="btn" onclick="insertRubrika('blue','small')">🔵 Kis rubrika</button>
+<button class="btn" onclick="insertRubrika('red','tiny')" style="background:#7f1d1d;border:1.5px solid #ef4444">🔴 8px keret</button>
+<button class="btn" onclick="deleteLastInserted()" style="background:#991b1b">↩️ Véletlen? Utolsó törlése</button><button class="btn" onclick="deleteSelected()" style="background:#991b1b">🗑️ Kijelölt törlése</button><button class="btn" onclick="undoDelete()" style="background:#065f46">↪️ Visszahozás (Undo)</button><button class="btn" onclick="clearAllRubrikas()" style="background:#000">🧹 Összes rubrika törlése</button><button class="btn" onclick="insertRubrika('green','tiny')" style="background:#14532d;border:1.5px solid #22c55e">🟢 8px keret</button>
+<span style="font-size:12px">Betű színe:</span><input type="color" id="fontColor" value="#e5e7eb" onchange="changeFontColor(this.value)" title="Betű színe"><button class="btn" onclick="changeFontColor('#111827')">Fekete betű</button><button class="btn" onclick="changeFontColor('#e5e7eb')">Fehér betű</button><br><span style="font-size:12px">Oldal színe:</span>
+<input type="color" id="pageColor" value="#0f0f23" onchange="colorPage(this.value)">
+<button class="btn" onclick="colorPage('#0f0f23')">Sötét</button>
+<button class="btn" onclick="colorPage('#fef3c7')">Sárga lap</button>
+<button class="btn" onclick="colorPage('#dbeafe')">Kék lap</button>
+</div>
+
+<div id="editor" class="editor" contenteditable="true" spellcheck="true" tabindex="0" role="textbox" aria-multiline="true" data-placeholder="✨ Új jegyzet - kezdj írni..."></div>
+
+<div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:4px">
+<button class="btn" onclick="newNote()" style="background:#16a34a">✨ Új jegyzet</button><button class="btn" onclick="saveNote()">💾 Mentés</button><button class="btn" onclick="githubManualSync()" style="background:#7c3aed;border:1px solid #a78bfa">☁️ Mentés GitHub-ra</button><button class="btn" onclick="openGitHubSettings()" style="background:#334155">⚙️ GitHub beállítás</button>
+<button class="btn" onclick="exportWord()">📝 Word</button>
+<button class="btn" onclick="exportHTML()">🌐 HTML</button>
+<button class="btn" onclick="shareNote()">📤 Megosztás</button>
+</div>
+
+
+<div id="githubSettings" style="display:none;margin-top:10px;background:#0b1220;border:1px solid #475569;padding:12px;border-radius:12px">
+  <div style="font-weight:900;margin-bottom:6px">☁️ GitHub automatikus szinkron</div>
+  <div style="font-size:11px;color:#cbd5e1;line-height:1.45;margin-bottom:8px">
+    Egyszer kell beállítani. A jegyzetek a GitHub repositoryban egy külön <b>v26-notes.json</b> fájlba kerülnek.
+    A GitHub Personal Access Token csak ezen az eszközön, a böngésző helyi tárhelyén lesz tárolva.
+    Csak olyan finomhangolt tokent használj, amely kizárólag ehhez az egy repositoryhoz ad <b>Contents: Read and write</b> jogosultságot.
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+    <input id="ghOwner" placeholder="GitHub felhasználó / szervezet" style="padding:8px;border-radius:7px;border:1px solid #475569;background:#111827;color:#fff">
+    <input id="ghRepo" placeholder="Repository neve" style="padding:8px;border-radius:7px;border:1px solid #475569;background:#111827;color:#fff">
+    <input id="ghBranch" value="main" placeholder="Branch (pl. main)" style="padding:8px;border-radius:7px;border:1px solid #475569;background:#111827;color:#fff">
+    <input id="ghPath" value="v26-notes.json" placeholder="Fájl útvonala" style="padding:8px;border-radius:7px;border:1px solid #475569;background:#111827;color:#fff">
+  </div>
+  <input id="ghToken" type="password" autocomplete="off" placeholder="GitHub Fine-grained PAT — Contents: Read and write" style="width:100%;box-sizing:border-box;margin-top:6px;padding:8px;border-radius:7px;border:1px solid #475569;background:#111827;color:#fff">
+  <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:7px">
+    <button class="btn" onclick="saveGitHubSettings()" style="background:#16a34a">💾 Beállítás mentése</button>
+    <button class="btn" onclick="githubManualSync()" style="background:#7c3aed">☁️ Most szinkronizál</button>
+    <button class="btn" onclick="loadFromGitHub(true)" style="background:#0369a1">🔄 GitHub → készülék</button>
+    <button class="btn" onclick="clearGitHubSettings()" style="background:#991b1b">🗑️ Kapcsolat törlése</button>
+    <button class="btn" onclick="document.getElementById('githubSettings').style.display='none'">✖️ Bezár</button>
+  </div>
+  <div id="githubStatus" style="font-size:11px;margin-top:7px;color:#94a3b8">GitHub: nincs beállítva.</div>
+</div>
+<div id="aiBox" style="display:none;margin-top:10px;background:#1f2937;padding:10px;border-radius:10px">
+<b>🤖 Saját AI</b> - mit segítsen?<br>
+<input id="aiInput" style="width:70%;padding:6px;border-radius:6px" placeholder="pl: bővítsd ki, foglald össze, tegyél hozzá rubrikát">
+<button class="btn" onclick="runAI()">Mehet</button>
+<div id="aiOut" style="margin-top:8px;opacity:.9"></div>
+</div>
+
+<div id="browser" style="display:none;margin-top:12px;background:#0a0a0a;padding:10px;border-radius:12px;border:1px solid #333">
+<div style="display:flex;gap:4px;flex-wrap:wrap">
+<button class="btn" onclick="loadWiki()">📚 Wikipedia (működik)</button>
+<button class="btn" onclick="loadJW()" style="background:#3b0764">👑 JW.org - új lapon is</button>
+<button class="btn" onclick="loadJWLib()" style="background:#3b0764">📖 JW Library</button>
+<button class="btn" onclick="loadYouTube()" style="background:#7f1d1d">▶️ YouTube (embed)</button>
+<button class="btn" onclick="loadGoogle()">🔍 Google</button>
+</div>
+<div style="display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;align-items:center">
+<input id="urlInput" style="width:58%;padding:8px;border-radius:8px;border:1px solid #444;background:#111;color:#fff" placeholder="https://hu.wikipedia.org vagy youtube link...">
+<button class="btn" onclick="loadURL(document.getElementById('urlInput').value)">Betölt iframe</button>
+<button class="btn" onclick="openInNewTab()" style="background:#16a34a">↗️ Megnyitás új lapon</button>
+<button class="btn" onclick="insertFromBrowser()">➕ Beillesztés a jegyzetbe</button>
+</div>
+<div style="display:flex;gap:4px;margin-top:4px"><button class="btn" onclick="toggleWikiEnlarge()">🔍 Wikipédia nagyítás / vissza</button><button class="btn" onclick="document.getElementById('webFrame').style.height=document.getElementById('webFrame').style.height==='600px'?'400px':'600px'">↕️ Magasság 400↔600</button></div><div id="browserStatus" style="margin-top:6px;font-size:11px;color:#9ca3af;background:#111;padding:6px;border-radius:6px">🌐 Böngésző kész - Wikipedia iframe-ben megy, JW.org és Google új lapon (biztonsági tiltás miatt). YouTube embed módban működik!</div>
+<iframe id="webFrame" style="width:100%;height:400px;background:#fff;border-radius:8px;margin-top:8px;border:1px solid #333" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+<div style="font-size:10px;opacity:.6;margin-top:4px">💡 Tipp: JW.org nem engedi iframe-et (X-Frame-Options). Katt "Megnyitás új lapon", olvasd, majd másold a szöveget vissza a jegyzetbe!</div>
+</div>
+
+
+
+
+<div id="calc" style="display:none;margin-top:12px;background:#0a0a0a;border:1.5px solid #333;padding:12px;border-radius:12px">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<b style="font-size:15px">🧮 SZUPER SZÁMOLÓ - Minden matematika egy helyen</b>
+<button class="btn" onclick="document.getElementById('calc').style.display='none'">✖️ Bezár</button>
+</div>
+
+<div style="display:flex;gap:4px;flex-wrap:wrap;margin:10px 0">
+<button class="btn blue" onclick="showCalcTab('basic')">🔢 Alap</button>
+<button class="btn blue" onclick="showCalcTab('algebra')">📐 Algebra</button>
+<button class="btn blue" onclick="showCalcTab('geometry')">📏 Mértan</button>
+<button class="btn blue" onclick="showCalcTab('trig')">📊 Trig - cos/sin/tan</button>
+<button class="btn blue" onclick="showCalcTab('pyth')">🔺 Pitagorasz</button>
+<button class="btn blue" onclick="showCalcTab('root')">√ Gyök/Log/Hatvány</button>
+<button class="btn blue" onclick="showCalcTab('csillag')">🌌 Csillagászat</button>
+<button class="btn blue" onclick="showCalcTab('binary')">💻 Számtech - bin/hex</button>
+</div>
+
+<div id="calcTabs">
+<div id="tab-basic" class="calcTab">
+<b>🔢 Alap műveletek</b><br>
+<input id="calcInputBasic" style="width:70%;padding:8px;border-radius:8px;background:#111;color:#fff;border:1px solid #444" placeholder="pl: 12*5+3, 100/4, 2^8">
+<button class="btn green" onclick="calcBasic()">= Számol</button>
+<div style="margin-top:6px;display:flex;gap:4px;flex-wrap:wrap">
+<button class="btn" onclick="insertCalc('7')">7</button><button class="btn" onclick="insertCalc('8')">8</button><button class="btn" onclick="insertCalc('9')">9</button><button class="btn" onclick="insertCalc('/')">/</button>
+<button class="btn" onclick="insertCalc('4')">4</button><button class="btn" onclick="insertCalc('5')">5</button><button class="btn" onclick="insertCalc('6')">6</button><button class="btn" onclick="insertCalc('*')">*</button>
+<button class="btn" onclick="insertCalc('1')">1</button><button class="btn" onclick="insertCalc('2')">2</button><button class="btn" onclick="insertCalc('3')">3</button><button class="btn" onclick="insertCalc('-')">-</button>
+<button class="btn" onclick="insertCalc('0')">0</button><button class="btn" onclick="insertCalc('.')">.</button><button class="btn" onclick="insertCalc('+')">+</button><button class="btn" onclick="insertCalc('(')">(</button><button class="btn" onclick="insertCalc(')')">)</button>
+</div>
+</div>
+
+<div id="tab-algebra" class="calcTab" style="display:none">
+<b>📐 Algebra - egyenletek</b><br>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin:6px 0">
+<label>a: <input id="algA" type="number" value="1" style="width:60px;padding:4px"></label>
+<label>b: <input id="algB" type="number" value="-3" style="width:60px;padding:4px"></label>
+<label>c: <input id="algC" type="number" value="2" style="width:60px;padding:4px"></label>
+<button class="btn green" onclick="solveQuad()">ax²+bx+c=0 megold</button>
+</div>
+<div id="algRes" style="background:#111;padding:6px;border-radius:6px;margin-top:6px"></div>
+</div>
+
+<div id="tab-geometry" class="calcTab" style="display:none">
+<b>📏 Mértan - terület, kerület, térfogat</b><br>
+<select id="geoShape" onchange="updateGeo()" style="padding:6px;border-radius:6px"><option value="square">Négyzet a oldal</option><option value="rect">Téglalap a,b</option><option value="circle">Kör r</option><option value="triangle">Háromszög a,b,c</option><option value="cube">Kocka a</option><option value="sphere">Gömb r</option></select>
+<div id="geoInputs" style="margin:6px 0"></div>
+<button class="btn green" onclick="calcGeo()">Számol</button>
+<div id="geoRes" style="background:#111;padding:6px;border-radius:6px;margin-top:6px"></div>
+</div>
+
+<div id="tab-trig" class="calcTab" style="display:none">
+<b>📊 Trigonometria - sin cos tan + fok/radián</b><br>
+<input id="trigDeg" type="number" value="30" style="width:80px;padding:6px" placeholder="fok"> fok
+<button class="btn" onclick="calcTrig('sin')">sin</button><button class="btn" onclick="calcTrig('cos')">cos</button><button class="btn" onclick="calcTrig('tan')">tan</button>
+<button class="btn" onclick="calcTrig('asin')">asin</button><button class="btn" onclick="calcTrig('acos')">acos</button><button class="btn" onclick="calcTrig('atan')">atan</button>
+<div id="trigRes" style="background:#111;padding:6px;border-radius:6px;margin-top:6px"></div>
+<div style="font-size:10px;opacity:.6;margin-top:4px">Tipp: 5*cos(30) vagy sin(45) is írható az alap mezőbe!</div>
+</div>
+
+<div id="tab-pyth" class="calcTab" style="display:none">
+<b>🔺 Pitagorasz - derékszögű háromszög</b><br>
+a: <input id="pyA" type="number" value="3" style="width:60px;padding:4px"> b: <input id="pyB" type="number" value="4" style="width:60px;padding:4px"> 
+<button class="btn green" onclick="calcPyth()">c = √(a²+b²)</button>
+<button class="btn" onclick="calcPythAB()">a = √(c²-b²) ha c=</button><input id="pyC" type="number" value="5" style="width:60px;padding:4px">
+<div id="pythRes" style="background:#111;padding:6px;border-radius:6px;margin-top:6px">c = 5</div>
+</div>
+
+<div id="tab-root" class="calcTab" style="display:none">
+<b>√ Gyökvonás, hatvány, log</b><br>
+<input id="rootNum" type="number" value="16" style="width:80px;padding:6px">
+<button class="btn" onclick="calcRoot('sqrt')">√</button><button class="btn" onclick="calcRoot('cbrt')">∛</button><button class="btn" onclick="calcRoot('square')">x²</button><button class="btn" onclick="calcRoot('cube')">x³</button>
+<input id="powExp" type="number" value="2" style="width:50px;padding:4px" placeholder="kitevő"><button class="btn" onclick="calcRoot('pow')">x^y</button>
+<button class="btn" onclick="calcRoot('log')">log10</button><button class="btn" onclick="calcRoot('ln')">ln</button><button class="btn" onclick="calcRoot('fact')">n!</button>
+<div id="rootRes" style="background:#111;padding:6px;border-radius:6px;margin-top:6px"></div>
+</div>
+
+<div id="tab-csillag" class="calcTab" style="display:none">
+<b>🌌 Csillagászat, fizika, mérték</b><br>
+<input id="starInput" style="width:70%;padding:6px;border-radius:6px;background:#111;color:#fff;border:1px solid #444" placeholder="pl: 2 fényév km, 1 AU km, 5 kg N, c=3e8">
+<button class="btn green" onclick="calcStar()">Számol</button>
+<div id="starRes" style="background:#111;padding:6px;border-radius:6px;margin-top:6px;font-size:12px">
+• 1 fényév = 9.461e12 km<br>• 1 AU = 149.6M km<br>• F = m*a, E=mc²
+</div>
+</div>
+
+<div id="tab-binary" class="calcTab" style="display:none">
+<b>💻 Számítástechnika - bináris, hex, ASCII</b><br>
+<input id="binInput" style="width:60%;padding:6px;border-radius:6px;background:#111;color:#fff;border:1px solid #444" placeholder="pl: 255 vagy 1010 vagy FF">
+<button class="btn" onclick="calcBinary()">Átvált</button>
+<div id="binRes" style="background:#111;padding:6px;border-radius:6px;margin-top:6px;font-family:monospace"></div>
+</div>
+</div>
+
+<div style="margin-top:10px;background:#111827;padding:8px;border-radius:8px;border:1px solid #333">
+<b>🧮 Gyors beírás:</b> <input id="calcInput" style="width:68%;padding:8px;border-radius:8px;background:#000;color:#0f0;border:1px solid #333;font-family:monospace" placeholder="Írj bármit: pitagorasz 3 4 | 5*cos(30) | sqrt(16) | 2 fényév | 255 bin">
+<button class="btn green" onclick="calc()">▶️ Számol</button>
+<div id="calcRes" style="margin-top:8px;background:#000;padding:8px;border-radius:6px;color:#0f0;font-family:monospace;min-height:24px"></div>
+<button class="btn blue" onclick="insertCalcResult()">➕ Eredmény beillesztése a jegyzetbe</button>
+</div>
+</div>
+<h3 style="margin:12px 0 4px">📒 Mentett jegyzetek - hosszan nyomd!</h3>
+<div id="notesList"></div>
+</div>
+</div>
+
+<script>
+// Élő univerzum: több mélységű csillagmező + köd + meteorok
+const c=document.getElementById('uni'); const ctx=c.getContext('2d'); let W=0,H=0,D=1;
+function rs(){D=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;c.width=W*D;c.height=H*D;c.style.width=W+'px';c.style.height=H+'px';ctx.setTransform(D,0,0,D,0,0);}
+rs(); addEventListener('resize',rs);
+const stars=Array.from({length:420},()=>({x:Math.random(),y:Math.random(),z:.15+Math.random()*.85,r:.35+Math.random()*1.65,a:.25+Math.random()*.75,p:Math.random()*6.28,s:.15+Math.random()*.65}));
+const dust=Array.from({length:55},()=>({x:Math.random(),y:Math.random(),r:20+Math.random()*100,a:.012+Math.random()*.025,v:(Math.random()-.5)*.00012}));
+let meteors=[]; let nextMeteor=Date.now()+1800;
+function spawnMeteor(){meteors.push({x:Math.random()*W*1.15-W*.05,y:Math.random()*H*.35-H*.1,len:60+Math.random()*130,v:5+Math.random()*8,a:.7+Math.random()*.3});}
+function drawUniverse(t){
+  ctx.clearRect(0,0,W,H);
+  const g=ctx.createRadialGradient(W*.5,H*.48,0,W*.5,H*.48,Math.max(W,H)*.72);g.addColorStop(0,'rgba(85,90,190,.10)');g.addColorStop(.45,'rgba(30,50,120,.035)');g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  dust.forEach(d=>{d.x+=d.v;if(d.x>1)d.x=0;if(d.x<0)d.x=1;ctx.beginPath();ctx.arc(d.x*W,d.y*H,d.r,0,Math.PI*2);ctx.fillStyle=`rgba(100,120,210,${d.a})`;ctx.fill();});
+  stars.forEach(s=>{const tw=.72+.28*Math.sin(t*.001*s.s+s.p);const size=s.r*(.55+.75*s.z);ctx.globalAlpha=s.a*tw;ctx.beginPath();ctx.arc(s.x*W,s.y*H,size,0,Math.PI*2);ctx.fillStyle=s.z>.7?'#fff':'#c7d2fe';ctx.fill();if(s.z>.86){ctx.globalAlpha*=.22;ctx.fillRect(s.x*W-size*3,s.y*H-.35,size*6,.7);ctx.fillRect(s.x*W-.35,s.y*H-size*3,.7,size*6);}});
+  ctx.globalAlpha=1;
+  if(Date.now()>nextMeteor){spawnMeteor();nextMeteor=Date.now()+2500+Math.random()*5000;}
+  meteors=meteors.filter(m=>m.x<W+200&&m.y<H+200);meteors.forEach(m=>{m.x+=m.v;m.y+=m.v*.55;const gr=ctx.createLinearGradient(m.x,m.y,m.x-m.len,m.y-m.len*.55);gr.addColorStop(0,`rgba(255,255,255,${m.a})`);gr.addColorStop(1,'rgba(150,170,255,0)');ctx.strokeStyle=gr;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(m.x,m.y);ctx.lineTo(m.x-m.len,m.y-m.len*.55);ctx.stroke();});
+  requestAnimationFrame(drawUniverse);
+}
+requestAnimationFrame(drawUniverse);
+
+
+document.getElementById('cubeWrap').onclick=toggleMenu;
+function closeAndSave(){ try{saveNoteAuto();}catch(e){} const m=document.getElementById('superMenu'); if(m) m.classList.remove('open'); }
+function toggleMenu(){const m=document.getElementById('superMenu'); m.classList.toggle('open'); if(m.classList.contains('open')){setTimeout(()=>{const ed=document.getElementById('editor'); ed.focus();},300);}}
+
+// --- ICIPICI KEP FIX - NAGYOBB + KATTRA TELJES A JEGYZETBEN ---
+function addTinyImage(){
+  const inp=document.createElement('input'); inp.type='file'; inp.accept='image/*';
+  inp.onchange=e=>{
+    const f=e.target.files[0]; if(!f) return;
+    const r=new FileReader();
+    r.onload=ev=>{
+      const id='img_'+Date.now();
+      // kicsit nagyobb 130px, kattra megnő teljes képre a jegyzetben + modal is
+      const html=`<img id="${id}" src="${ev.target.result}" class="mini-img" data-full="0" title="Katt: megnő teljes képre a jegyzetben (még egyszer katt: vissza kicsi)"><span> </span><br>`;
+      document.execCommand('insertHTML',false,html);
+      autoBibleDetect();
+    };
+    r.readAsDataURL(f);
+  };
+  inp.click();
+}
+function enlarge(src){
+  // modal is fallback
+  document.getElementById('bigImg').src=src; 
+  document.getElementById('imgModal').classList.add('open');
+}
+function toggleImageSize(img){
+  const isFull = img.classList.contains('full');
+  if(isFull){
+    img.classList.remove('full');
+    img.dataset.full='0';
+    img.title='Katt: megnő teljes képre';
+  }else{
+    // előbb minden más képet kicsire
+    document.querySelectorAll('.mini-img.full').forEach(i=>{i.classList.remove('full'); i.dataset.full='0';});
+    img.classList.add('full');
+    img.dataset.full='1';
+    img.title='Katt: vissza kicsire';
+    // görgess hozzá
+    setTimeout(()=>img.scrollIntoView({behavior:'smooth',block:'center'}),100);
+  }
+}
+// delegated click a jegyzetben lévő képekre - biztos működik contentEditable-ben is
+document.addEventListener('click', function(e){
+  if(e.target && e.target.classList && e.target.classList.contains('mini-img')){
+    e.preventDefault();
+    e.stopPropagation();
+    toggleImageSize(e.target);
+  }
+});
+
+function addFile(){const inp=document.createElement('input'); inp.type='file'; inp.onchange=e=>{const f=e.target.files[0]; document.execCommand('insertHTML',false,`<div style="display:inline-block;background:#23234a;padding:4px 8px;border-radius:6px;margin:4px;font-size:12px">📁 ${f.name}</div>`);}; inp.click();}
+
+// --- FORMAT ---
+function fmt(cmd){document.execCommand(cmd,false,null);}
+function fontSize(v){document.execCommand('fontSize',false,'7'); const sel=window.getSelection(); if(!sel.rangeCount) return; const range=sel.getRangeAt(0); const span=document.createElement('span'); span.style.fontSize=v+'px'; span.appendChild(range.extractContents()); range.insertNode(span);}
+
+let lastInsertedIds=[];
+let deletedStack=[]; // undo-hoz
+
+function insertRubrika(col, size){
+  if(!size) size='big'; // mostantól alapból nagyobb téglalap!
+  const id='rub_'+Date.now();
+  const sizeClass = size==='tiny' ? 'tiny' : size==='small' ? 'small' : 'big';
+  const titleText = size==='tiny' ? 'KIS RUBRIKA' : size==='big' ? 'TÉGLALAP RUBRIKA' : 'RUBRIKA';
+  const placeholder = size==='tiny' ? 'Ide írj apró betűvel...' : 'Katt ide és írj... (törléshez X vagy hosszan nyomd)';
+  const colorMap={blue:'#93c5fd',red:'#fca5a5',green:'#86efac',yellow:'#fde68a',purple:'#d8b4fe'};
+  const titleColor=colorMap[col]||'#93c5fd';
+  const htmlBox = `<div id="${id}" class="rubrika-box ${col} ${sizeClass}" contenteditable="false" onclick="selectRubrika('${id}')" oncontextmenu="event.preventDefault(); deleteRubrika('${id}'); return false;"><span class="rubrika-del" onclick="event.stopPropagation(); deleteRubrika('${id}')" title="Törlés">✕</span><span class="rubrika-title" style="color:${titleColor}">📑 ${titleText}</span><span class="rubrika-content" contenteditable="true" data-placeholder="${placeholder}">${placeholder}</span><span style="font-size:7px;opacity:.5;display:block;margin-top:4px">jobb klikk vagy X = törlés • katt = kijelölés</span></div> `;
+  document.execCommand('insertHTML', false, htmlBox);
+  lastInsertedIds.push(id);
+  if(lastInsertedIds.length>20) lastInsertedIds.shift();
+  setTimeout(()=>{
+    const el=document.getElementById(id);
+    if(el){ const content=el.querySelector('.rubrika-content'); if(content){ content.focus(); const range=document.createRange(); range.selectNodeContents(content); const sel=window.getSelection(); sel.removeAllRanges(); sel.addRange(range); } }
+  },120);
+  saveNoteAuto && saveNoteAuto();
+}
+
+function deleteRubrika(id){
+  const el=document.getElementById(id);
+  if(!el) return;
+  // mentes undo-hoz
+  deletedStack.push({id:id, html:el.outerHTML, parent:el.parentNode});
+  if(deletedStack.length>10) deletedStack.shift();
+  el.style.transition='.2s'; el.style.transform='scale(0) rotate(5deg)'; el.style.opacity='0';
+  setTimeout(()=>{ el.remove(); saveNoteAuto && saveNoteAuto(); },200);
+}
+
+function selectRubrika(id){
+  document.querySelectorAll('.rubrika-box.selected').forEach(b=>b.classList.remove('selected'));
+  const el=document.getElementById(id);
+  if(el) el.classList.add('selected');
+  window.selectedRubrikaId=id;
+}
+
+function deleteSelected(){
+  if(window.selectedRubrikaId){ deleteRubrika(window.selectedRubrikaId); window.selectedRubrikaId=null; }
+  else alert('Előbb kattints egy rubrikára hogy kijelöld (sárga keret), aztán törlés!');
+}
+
+function deleteLastInserted(){
+  if(lastInsertedIds.length===0){ alert('Nincs mit törölni - még nem szúrtál be rubrikát'); return; }
+  const lastId=lastInsertedIds.pop();
+  const el=document.getElementById(lastId);
+  if(el){ deleteRubrika(lastId); } else {
+    // ha már nincs meg, próbáld az utolsó elemet a jegyzetben
+    const boxes=document.querySelectorAll('.rubrika-box');
+    if(boxes.length>0){ deleteRubrika(boxes[boxes.length-1].id); }
+  }
+}
+
+function undoDelete(){
+  if(deletedStack.length===0){ alert('Nincs mit visszahozni'); return; }
+  const last=deletedStack.pop();
+  const ed=document.getElementById('editor');
+  ed.insertAdjacentHTML('beforeend', last.html);
+  saveNoteAuto && saveNoteAuto();
+}
+
+function clearAllRubrikas(){
+  if(confirm('Biztos törlöd az ÖSSZES rubrikát a jegyzetből?')){
+    document.querySelectorAll('.rubrika-box').forEach(b=>b.remove());
+    saveNoteAuto && saveNoteAuto();
+  }
+}
+
+// régi kompatibilitás - ha csak rubrika színt kap
+function insertRubrikaOld(col){ insertRubrika(col,'small'); }
+;
+function autoBibleDetect(){safeBibleCheck(true);}
+
+// Biblia-hivatkozás motor — folyamatos gépeléshez.
+// FONTOS: gépelés közben csak akkor alakítunk át egy hivatkozást,
+// ha már lezártad szóközzel/írásjellel. Így pl. a "2 Péter 3:15"
+// nem válik idő előtt "2 Péter 3:1"-gyé.
+let bibleDetectTimer=null;
+function bibleBookNamePattern(){
+  const names=[];
+  if(typeof BIBLE_BOOKS!=='undefined' && Array.isArray(BIBLE_BOOKS)) BIBLE_BOOKS.forEach(b=>{if(b&&b[0])names.push(String(b[0]));});
+  if(typeof BIBLE_ALIASES!=='undefined' && BIBLE_ALIASES) Object.keys(BIBLE_ALIASES).forEach(k=>names.push(k));
+  const clean=[...new Set(names.map(x=>String(x).trim()).filter(Boolean))];
+  clean.sort((a,b)=>b.length-a.length);
+  return '(?:'+clean.map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/\\s+/g,'\\s+')).join('|')+')';
+}
+function bibleReferencePattern(finalPass=false){
+  const book=bibleBookNamePattern();
+  const full=book+'\\s+\\d+\\s*:\\s*\\d+(?:\\s*[-–]\\s*\\d+)?';
+  const live='(?:'+book+'\\s+\\d+\\s*:\\s*\\d{2,}(?:\\s*[-–]\\s*\\d+)?)|(?:'+book+'\\s+\\d+\\s*:\\s*\\d+(?:\\s*[-–]\\s*\\d+)?)(?=\\s|[.,;:!?)}\\]»”"])';
+  return new RegExp('('+ (finalPass ? full : live) +')','gi');
+}
+function getCaretInfo(root){const sel=window.getSelection();if(!sel||!sel.rangeCount||!root.contains(sel.anchorNode))return null;return {node:sel.anchorNode,offset:sel.anchorOffset};}
+function replaceRefsInTextNode(node,finalPass=false,caretInfo=null){
+  if(!node||node.nodeType!==Node.TEXT_NODE||!node.parentNode)return false;
+  if(node.parentElement&&node.parentElement.closest('.bible-ref'))return false;
+  const txt=node.nodeValue||'',re=bibleReferencePattern(finalPass);let m,last=0,changed=false,caretAfter=null,caretOffset=0;
+  const frag=document.createDocumentFragment();
+  while((m=re.exec(txt))){
+    const raw=String(m[1]||'').trim();
+    if(!raw||typeof parseBibleRef!=='function'||!parseBibleRef(raw))continue;
+    const a=m.index,b=m.index+m[1].length;
+    if(!finalPass&&caretInfo&&caretInfo.node===node&&b>caretInfo.offset)continue;
+    frag.appendChild(document.createTextNode(txt.slice(last,a)));
+    const span=document.createElement('span');span.className='bible-ref';span.dataset.ref=raw;span.setAttribute('role','button');span.setAttribute('tabindex','0');span.setAttribute('contenteditable','false');span.title='Kattints a Biblia-vers megnyitásához';span.innerHTML='📖 <span class="bible-ref-text"></span>';span.querySelector('.bible-ref-text').textContent=raw;frag.appendChild(span);
+    frag.appendChild(document.createTextNode(''));
+    if(caretInfo&&caretInfo.node===node&&caretInfo.offset>=b){caretAfter=span;caretOffset=caretInfo.offset-b;}
+    last=b;changed=true;
+  }
+  if(!changed)return false;
+  frag.appendChild(document.createTextNode(txt.slice(last)));const parent=node.parentNode;parent.replaceChild(frag,node);
+  if(caretAfter){const target=caretAfter.nextSibling;const sel=window.getSelection(),r=document.createRange();if(target&&target.nodeType===Node.TEXT_NODE)r.setStart(target,Math.min(caretOffset,target.nodeValue.length));else r.setStartAfter(caretAfter);r.collapse(true);sel.removeAllRanges();sel.addRange(r);}
+  return true;
+}
+function safeBibleCheck(finalPass=false){
+  if(window.__v26BibleProcessing)return;const ed=document.getElementById('editor');if(!ed)return;window.__v26BibleProcessing=true;
+  try{const caret=getCaretInfo(ed);let changed=false;if(caret&&caret.node&&caret.node.nodeType===Node.TEXT_NODE)changed=replaceRefsInTextNode(caret.node,finalPass,caret)||changed;if(finalPass){const w=document.createTreeWalker(ed,NodeFilter.SHOW_TEXT,null,false),nodes=[];let n;while((n=w.nextNode())){if(n.parentElement&&n.parentElement.closest('.bible-ref'))continue;nodes.push(n);}for(const x of nodes)changed=replaceRefsInTextNode(x,true,null)||changed;}if(changed&&typeof saveNoteAuto==='function')saveNoteAuto();}catch(e){console.error('Biblia-hivatkozás hiba:',e);}finally{window.__v26BibleProcessing=false;}
+}
+function scheduleBibleDetect(){clearTimeout(bibleDetectTimer);bibleDetectTimer=setTimeout(()=>safeBibleCheck(false),80);}
+
+function installBibleReferenceEngine(){
+  const ed=document.getElementById('editor');if(!ed||ed.dataset.bibleEngine==='1')return;ed.dataset.bibleEngine='1';
+  ed.addEventListener('input',scheduleBibleDetect);ed.addEventListener('paste',()=>setTimeout(()=>safeBibleCheck(true),120));ed.addEventListener('blur',()=>safeBibleCheck(true));
+  ed.addEventListener('click',e=>{const ref=e.target.closest&&e.target.closest('.bible-ref');if(ref){e.preventDefault();e.stopPropagation();openBible(ref.dataset.ref);}});
+  ed.addEventListener('keydown',e=>{if(e.key===' '||e.key==='Enter'||e.key==='Tab')setTimeout(()=>safeBibleCheck(false),30);});
+}
+function manualBibleMark(){
+  const ed=document.getElementById('editor');
+  if(!ed)return;
+  const ref=prompt('Biblia-hivatkozás (például: János 3:16):');
+  if(ref && parseBibleRef(ref)){
+    const span=document.createElement('span');
+    span.className='bible-ref'; span.dataset.ref=ref.trim(); span.textContent=ref.trim();
+    const sel=window.getSelection();
+    if(sel && sel.rangeCount && ed.contains(sel.anchorNode)){
+      const range=sel.getRangeAt(0); range.deleteContents(); range.insertNode(span);
+      range.setStartAfter(span); range.collapse(true); sel.removeAllRanges(); sel.addRange(range);
+    }else ed.append(span,document.createTextNode(' '));
+    saveNoteAuto && saveNoteAuto();
+  }
+}
+
+const BIBLE_BOOKS=[
+['1Mózes','Teremtés könyve',50],['2Mózes','2Mózes könyve',40],['3Mózes','3Mózes könyve',27],['4Mózes','4Mózes könyve',36],['5Mózes','5Mózes könyve',34],['Józsué','Józsué könyve',24],['Bírák','Bírák könyve',21],['Ruth','Ruth könyve',4],['1Sámuel','1Sámuel',31],['2Sámuel','2Sámuel',24],['1Királyok','1Királyok',22],['2Királyok','2Királyok',25],['1Krónikák','1Krónikák',29],['2Krónikák','2Krónikák',36],['Ezsdrás','Ezsdrás könyve',10],['Nehémiás','Nehémiás',13],['Eszter','Eszter',10],['Jób','Jób',42],['Zsoltárok','Zsoltárok',150],['Példabeszédek','Példabeszédek',31],['Prédikátor','Prédikátor könyve',12],['Énekek éneke','Énekek éneke',8],['Ézsaiás','Ézsaiás',66],['Jeremiás','Jeremiás',52],['Jeremiás siralmai','Jeremiás siralmai',5],['Ezékiel','Ezékiel',48],['Dániel','Dániel',12],['Hóseás','Hóseás',14],['Jóel','Jóel',3],['Ámósz','Ámósz',9],['Abdiás','Abdiás',1],['Jónás','Jónás',4],['Mikeás','Mikeás',7],['Náhum','Náhum',3],['Habakuk','Habakuk',3],['Sofóniás','Sofóniás',3],['Aggeus','Aggeus',2],['Zakariás','Zakariás',14],['Malakiás','Malakiás',4],
+['Máté','Máté evangéliuma',28],['Márk','Márk evangéliuma',16],['Lukács','Lukács evangéliuma',24],['János','János evangéliuma',21],['Apostolok cselekedetei','Apostolok cselekedetei',28],['Róma','Rómaiakhoz írt levél',16],['1Korintusz','1Korintusz',16],['2Korintusz','2Korintusz',13],['Galácia','Galácia',6],['Efézus','Efézus',6],['Filippi','Filippi',4],['Kolosszé','Kolosszé',4],['1Tesszalonika','1Tesszalonika',5],['2Tesszalonika','2Tesszalonika',3],['1Timóteusz','1Timóteusz',6],['2Timóteusz','2Timóteusz',4],['Titusz','Titusz',3],['Filemon','Filemon',1],['Héberek','Héberek',13],['Jakab','Jakab',5],['1Péter','1Péter',5],['2Péter','2Péter',3],['1János','1János',5],['2János','2János',1],['3János','3János',1],['Júdás','Júdás',1],['Jelenések','Jelenések',22]
+];
+const BIBLE_ALIASES={
+'gen':'1Mózes','genesis':'1Mózes','1mozes':'1Mózes','1 mózes':'1Mózes','teremtes':'1Mózes','ex':'2Mózes','exodus':'2Mózes','2mozes':'2Mózes','lev':'3Mózes','leviticus':'3Mózes','3mozes':'3Mózes','num':'4Mózes','numbers':'4Mózes','4mozes':'4Mózes','deut':'5Mózes','deuteronomy':'5Mózes','5mozes':'5Mózes','josh':'Józsué','joshua':'Józsué','jos':'Józsué','judg':'Bírák','ruth':'Ruth','1sam':'1Sámuel','1 sámuel':'1Sámuel','2sam':'2Sámuel','2 sámuel':'2Sámuel','1kir':'1Királyok','2kir':'2Királyok','1királyok':'1Királyok','2királyok':'2Királyok','1chron':'1Krónikák','2chron':'2Krónikák','1krónikák':'1Krónikák','2krónikák':'2Krónikák','ezsdrás':'Ezsdrás','neh':'Nehémiás','nehémiás':'Nehémiás','est':'Eszter','job':'Jób','zsolt':'Zsoltárok','zsoltárok':'Zsoltárok','ps':'Zsoltárok','péld':'Példabeszédek','példabeszédek':'Példabeszédek','préd':'Prédikátor','prédikátor':'Prédikátor','énekek':'Énekek éneke','ézs':'Ézsaiás','ézsaiás':'Ézsaiás','jer':'Jeremiás','jeremiás':'Jeremiás','jsir':'Jeremiás siralmai','jeremiás siralmai':'Jeremiás siralmai','ez':'Ezékiel','ezékiel':'Ezékiel','dán':'Dániel','dániel':'Dániel','hós':'Hóseás','hóseás':'Hóseás','jóel':'Jóel','ámósz':'Ámósz','abdiás':'Abdiás','jónás':'Jónás','mikeás':'Mikeás','náhum':'Náhum','hab':'Habakuk','habakuk':'Habakuk','sof':'Sofóniás','sofo':'Sofóniás','aggeus':'Aggeus','zak':'Zakariás','zakariás':'Zakariás','mal':'Malakiás','malakiás':'Malakiás','máté':'Máté','mát':'Máté','mt':'Máté','márk':'Márk','mk':'Márk','már':'Márk','lukács':'Lukács','luk':'Lukács','lk':'Lukács','jános':'János','ján':'János','jn':'János','apcsel':'Apostolok cselekedetei','apostolok cselekedetei':'Apostolok cselekedetei','róma':'Róma','rom':'Róma','róm':'Róma','1kor':'1Korintusz','2kor':'2Korintusz','gal':'Galácia','galácia':'Galácia','ef':'Efézus','efézus':'Efézus','fil':'Filippi','filippi':'Filippi','kol':'Kolosszé','kolosszé':'Kolosszé','1tessz':'1Tesszalonika','2tessz':'2Tesszalonika','1tim':'1Timóteusz','2tim':'2Timóteusz','tit':'Titusz','filem':'Filemon','héberek':'Héberek','zsid':'Héberek','jak':'Jakab','1pét':'1Péter','2pét':'2Péter','1péter':'1Péter','2péter':'2Péter','1ján':'1János','2ján':'2János','3ján':'3János','1jános':'1János','2jános':'2János','3jános':'3János','júd':'Júdás','júdás':'Júdás','jel':'Jelenések','jelenések':'Jelenések','jelenések könyve':'Jelenések'};
+const BIBLE_IDB='V26BibleOfflineV2';
+const BIBLE_DOWNLOAD_URL='https://api.biblesupersearch.com/api/download?bible=karoli&format=json';
+const BIBLE_SOURCE_URL='https://api.biblesupersearch.com';
+function showBibleStatus(html){const st=document.getElementById('bibleLibraryStatus');if(st){st.style.display='block';st.innerHTML=html;st.scrollIntoView({behavior:'smooth',block:'nearest'});}}
+function downloadBibleDataFile(){
+  // A szerver közvetlen fájlletöltést ad vissza; nem nyers GitHub-oldalt nyitunk meg.
+  const a=document.createElement('a');a.href=BIBLE_DOWNLOAD_URL;a.download='Karoli-Biblia-1908.json';a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove();
+}
+function bibleVerseRecord(r){
+  if(!r||typeof r!=='object')return null;
+  const b=Number(r.book??r.book_id??r.b??r.bookNumber);
+  const c=Number(r.chapter??r.c??r.chapterNumber);
+  const v=Number(r.verse??r.v??r.verseNumber);
+  const t=r.text??r.t??r.verseText??r.content;
+  if(!Number.isFinite(b)||!Number.isFinite(c)||!Number.isFinite(v)||t==null)return null;
+  return {book:b,chapter:c,verse:v,text:String(t)};
+}
+function normalizeBibleImport(raw){
+  const records=[];
+  const push=x=>{const r=bibleVerseRecord(x);if(r)records.push(r);};
+  const walk=(x,ctx={})=>{
+    if(x==null)return;
+    if(Array.isArray(x)){x.forEach(v=>walk(v,ctx));return;}
+    if(typeof x!=='object')return;
+    // Bible SuperSearch passage/minimal structures
+    if(x.results){
+      if(x.results.karoli) walk(x.results.karoli,{...ctx});
+      else walk(x.results,ctx);
+    }
+    if(x.verses){
+      // Passage format: verses -> karoli -> chapter -> verse
+      if(x.verses.karoli) walk(x.verses.karoli,ctx);
+      else walk(x.verses,ctx);
+    }
+    if(x.book_id!=null && x.chapter_verse){
+      const bn=Number(x.book_id);
+      const vv=x.verses?.karoli||x.verses;
+      if(vv&&typeof vv==='object'&&Number.isFinite(bn)) Object.entries(vv).forEach(([ch,verses])=>Object.entries(verses||{}).forEach(([vn,v])=>push({book:bn,chapter:ch,verse:vn,text:v?.text??v?.content??v})));
+    }
+    const direct=bibleVerseRecord(x);if(direct){records.push(direct);return;}
+    if(x.books){walk(x.books,ctx);return;}
+    if(x.chapters){
+      const bn=Number(x.number??x.nr??x.book??x.book_id??x.id);
+      if(Number.isFinite(bn)) x.chapters.forEach(ch=>{
+        const cn=Number(ch.number??ch.chapter??ch.c??ch.id);
+        if(Number.isFinite(cn)&&Array.isArray(ch.verses)) ch.verses.forEach(v=>push({book:bn,chapter:cn,verse:v.number??v.verse??v.v,text:v.text??v.verseText??v.t}));
+      });
+      return;
+    }
+    Object.entries(x).forEach(([k,v])=>{
+      if(v&&typeof v==='object'){
+        const numKey=/^\d+$/.test(k)?Number(k):null;
+        if(numKey!=null && ctx.book!=null && ctx.chapter==null) walk(v,{...ctx,chapter:numKey});
+        else if(numKey!=null && ctx.book!=null && ctx.chapter!=null) walk(v,{...ctx,verse:numKey});
+        else walk(v,ctx);
+      }
+    });
+    if(ctx.book!=null&&ctx.chapter!=null&&ctx.verse!=null&&typeof x==='string')push({book:ctx.book,chapter:ctx.chapter,verse:ctx.verse,text:x});
+  };
+  walk(raw);
+  // Minimal format can arrive as results.karoli:[{book,chapter,verse,text}]
+  if(!records.length && raw?.results?.karoli && Array.isArray(raw.results.karoli)) raw.results.karoli.forEach(push);
+  if(!records.length)throw new Error('A letöltött Biblia adatstruktúráját nem sikerült felismerni.');
+  const books={};
+  records.forEach(r=>{(books[r.book]??=[]).push(r);});
+  const full={books:Object.keys(books).sort((a,b)=>+a-+b).map(bn=>({number:+bn,name:BIBLE_BOOKS[+bn-1]?.[1]||('Könyv '+bn),chapters:Array.from(new Set(books[bn].map(r=>r.chapter))).sort((a,b)=>a-b).map(c=>({number:c,verses:books[bn].filter(r=>r.chapter===c).sort((a,b)=>a.verse-b.verse).map(r=>({number:r.verse,text:r.text}))}))}))};
+  if(full.books.length<60)throw new Error('A letöltött fájlban csak '+full.books.length+' könyvet találtam; a teljes Biblia nem tölthető be biztonságosan.');
+  return full;
+}
+async function saveFullBible(full,sizeBytes){
+  showBibleStatus('⏳ <b>Teljes Biblia feldolgozása…</b><br>66 könyv ellenőrzése és offline mentése…');
+  await idbSetFullBible(full);
+  let count=0;
+  for(const b of full.books){
+    for(const c of b.chapters){await idbSet(String(b.number)+'-'+String(c.number),c);count++;}
+  }
+  showBibleStatus('<div style="font-size:20px;font-weight:900">✅ TELJES OFFLINE BIBLIA KÉSZ</div><div style="margin-top:6px">'+full.books.length+' könyv • '+count+' fejezet</div><div style="margin-top:6px">Most már internet nélkül is megnyitható.</div>');
+}
+async function installBibleFromServer(){
+  showBibleStatus('⏳ <b>Kapcsolódás a Biblia letöltő szerverhez…</b><br>Nem 1189 külön kérést indítunk: egyetlen teljes Biblia-adatcsomagot kérünk.');
+  try{
+    const r=await fetch(BIBLE_DOWNLOAD_URL,{cache:'no-store'});
+    if(!r.ok)throw new Error('A letöltő szerver HTTP '+r.status+' hibát adott.');
+    const total=Number(r.headers.get('content-length'))||0;
+    let received=0; let text='';
+    if(r.body&&r.body.getReader){
+      const reader=r.body.getReader(),chunks=[];
+      while(true){const {done,value}=await reader.read();if(done)break;chunks.push(value);received+=value.byteLength;if(total)showBibleStatus('⏬ <b>Teljes Biblia letöltése… '+Math.round(received/total*100)+'%</b><br>'+(received/1048576).toFixed(1)+' MB');}
+      const bytes=new Uint8Array(received);let pos=0;for(const ch of chunks){bytes.set(ch,pos);pos+=ch.length;}
+      text=new TextDecoder('utf-8').decode(bytes);
+    }else{text=await r.text();}
+    showBibleStatus('⏳ <b>Letöltés kész.</b><br>A Biblia adatainak feldolgozása…');
+    const raw=JSON.parse(text);
+    const full=normalizeBibleImport(raw);
+    await saveFullBible(full,received||text.length);
+  }catch(e){
+    showBibleStatus('<div style="color:#fecaca;font-weight:900">❌ Az automatikus letöltés nem sikerült.</div><div style="margin-top:6px">'+escapeHtml(e.message||String(e))+'</div><div style="margin-top:10px">Próbáld meg a <b>„⬇️ Bibliafájl megnyitása/letöltése”</b> gombot. A szerver közvetlenül letölthető JSON-fájlt ad.</div>');
+  }
+}
+async function importBibleJsonFile(input){
+  const file=input.files&&input.files[0];if(!file)return;
+  showBibleStatus('⏳ Bibliafájl feldolgozása…');
+  try{const raw=JSON.parse(await file.text());const full=normalizeBibleImport(raw);await saveFullBible(full,file.size);}catch(e){showBibleStatus('<div style="color:#fecaca;font-weight:900">❌ Nem sikerült a Bibliafájl betöltése.</div><div>'+escapeHtml(e.message||String(e))+'</div>');}finally{input.value='';}
+}
+
+function bibleNorm(s){return String(s||'').toLowerCase().replace(/[.]/g,'').replace(/\s+/g,' ').trim();}
+function findBibleBook(name){const n=bibleNorm(name);const key=BIBLE_ALIASES[n]||BIBLE_BOOKS.find(x=>bibleNorm(x[0])===n||bibleNorm(x[1])===n)?.[0];return BIBLE_BOOKS.find(x=>x[0]===key)||null;}
+function parseBibleRef(ref){let m=String(ref).trim().match(/^(.+?)\s+(\d+):(\d+)(?:\s*[-–]\s*(\d+))?$/);if(!m)return null;const b=findBibleBook(m[1]);if(!b)return null;return {book:b,chapter:+m[2],verse:+m[3],endVerse:m[4]?+m[4]:+m[3]};}
+function openBibleLibrary(){const box=document.getElementById('bibleLibraryBox');box.innerHTML='<div class="bible-library-box"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><h2 style="margin:0">📖 Online Biblia</h2><button class="btn" onclick="closeBibleLibrary()">✖️ Bezár</button></div><p style="font-size:12px;opacity:.78;line-height:1.5">A Biblia nem kerül letöltésre. A kiválasztott fejezet közvetlenül az online Biblia-szolgáltatásból töltődik be. A megnyitott fejezetet az alkalmazás gyorsítótárba is elmenti.</p><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" onclick="testBibleOnline()" style="background:#14532d;border:1px solid #22c55e;font-weight:900">🔎 Biblia kapcsolat teszt</button></div><div id="bibleLibraryStatus" style="margin:12px 0;padding:12px;background:#111827;border:2px solid #334155;border-radius:14px;color:#fff;font-size:13px;display:none"></div><div class="bible-section-title">Ószövetség — 39 könyv</div><div class="bible-book-grid" id="otBooks"></div><div class="bible-section-title">Újszövetség — 27 könyv</div><div class="bible-book-grid" id="ntBooks"></div></div>';document.getElementById('bibleLibraryModal').classList.add('open');renderBibleBooks();}
+function testBibleOnline(){showBibleStatus('⏳ Biblia kapcsolat tesztelése…');fetchBibleChapter(43,3).then(c=>{const v=c.verses.find(x=>Number(x.verse||x.number)===16);showBibleStatus(v?'✅ <b>Az online Biblia működik.</b><br>János 3:16 betöltve.':'⚠️ A kapcsolat működik, de a János 3:16 nem érkezett meg.');}).catch(e=>showBibleStatus('<span style="color:#fecaca;font-weight:900">❌ Az online Biblia most nem érhető el.</span><br>'+escapeHtml(e.message||String(e))));}
+function closeBibleLibrary(){document.getElementById('bibleLibraryModal').classList.remove('open');}
+function renderBibleBooks(){['otBooks','ntBooks'].forEach((id,part)=>{const arr=part===0?BIBLE_BOOKS.slice(0,39):BIBLE_BOOKS.slice(39);document.getElementById(id).innerHTML=arr.map((b,i)=>`<button class="bible-book" onclick="showBibleChapters(${BIBLE_BOOKS.indexOf(b)})">${escapeHtml(b[0])}<small>${escapeHtml(b[1])}<br>${b[2]} fejezet</small></button>`).join('');});}
+function showBibleChapters(index){const b=BIBLE_BOOKS[index];const box=document.getElementById('bibleLibraryBox');box.innerHTML=`<div class="bible-library-box"><div class="bible-controls"><button class="btn" onclick="openBibleLibrary()">← Könyvek</button><h2 style="margin:0">📖 ${escapeHtml(b[1])}</h2></div><p style="font-size:12px;opacity:.7">Válaszd ki a fejezetet.</p><div class="bible-chapter-grid">${Array.from({length:b[2]},(_,i)=>`<button class="bible-chapter" onclick="loadBibleChapter(${index},${i+1})">${i+1}</button>`).join('')}</div></div>`;}
+function idbOpen(){return new Promise((res,rej)=>{const r=indexedDB.open(BIBLE_IDB,1);r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains('chapters'))r.result.createObjectStore('chapters')};r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);});}
+async function idbGet(key){try{const db=await idbOpen();return await new Promise((res,rej)=>{const q=db.transaction('chapters','readonly').objectStore('chapters').get(key);q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error);});}catch(e){return null;}}
+async function idbSet(key,val){const db=await idbOpen();return new Promise((res,rej)=>{const q=db.transaction('chapters','readwrite').objectStore('chapters').put(val,key);q.onsuccess=()=>res();q.onerror=()=>rej(q.error);});}
+async function idbGetFullBible(){return idbGet('__FULL_BIBLE__');}
+async function idbSetFullBible(val){return idbSet('__FULL_BIBLE__',val);}
+function extractChapterFromFullBible(full,bookNo,chapter){
+  const books=full&&Array.isArray(full.books)?full.books:null;
+  if(!books)return null;
+  const book=books.find(b=>Number(b.nr)===Number(bookNo))||books[bookNo-1];
+  if(!book||!Array.isArray(book.chapters))return null;
+  return book.chapters.find(c=>Number(c.chapter)===Number(chapter))||book.chapters[chapter-1]||null;
+}
+function bssRefForBook(bookNo){
+  const refs=['Gen','Exod','Lev','Num','Deut','Josh','Judg','Ruth','1 Sam','2 Sam','1 Kgs','2 Kgs','1 Chr','2 Chr','Ezra','Neh','Esth','Job','Ps','Prov','Eccl','Song','Isa','Jer','Lam','Ezek','Dan','Hos','Joel','Amos','Obad','Jonah','Mic','Nah','Hab','Zeph','Hag','Zech','Mal','Matt','Mark','Luke','John','Acts','Rom','1 Cor','2 Cor','Gal','Eph','Phil','Col','1 Thess','2 Thess','1 Tim','2 Tim','Titus','Phlm','Heb','Jas','1 Pet','2 Pet','1 John','2 John','3 John','Jude','Rev'];
+  return refs[Number(bookNo)-1]||'';
+}
+function fetchBibleChapterJSONP(bookNo,chapter){
+  return new Promise((resolve,reject)=>{
+    const cb='v26BibleCB_'+Date.now()+'_'+Math.random().toString(36).slice(2);
+    const script=document.createElement('script');
+    const ref=encodeURIComponent(bssRefForBook(bookNo)+' '+chapter);
+    let done=false;
+    const cleanup=()=>{done=true;try{delete window[cb]}catch(_){window[cb]=undefined}script.remove();clearTimeout(timer)};
+    const timer=setTimeout(()=>{if(done)return;cleanup();reject(new Error('A Biblia online szolgáltatás nem válaszolt 20 másodpercen belül.'))},20000);
+    window[cb]=(data)=>{if(done)return;cleanup();resolve(data)};
+    script.onerror=()=>{if(done)return;cleanup();reject(new Error('A Biblia online szolgáltatás nem volt elérhető.'))};
+    script.src='https://api.biblesupersearch.com/api?bible=karoli&reference='+ref+'&data_format=minimal&callback='+cb+'&page_all=true';
+    document.head.appendChild(script);
+  });
+}
+async function fetchBibleChapter(bookNo,chapter){
+  const key=bookNo+'-'+chapter;
+  const cached=await idbGet(key);if(cached)return cached;
+  const full=await idbGetFullBible();
+  if(full){const c=extractChapterFromFullBible(full,bookNo,chapter);if(c)return c;}
+  const data=await fetchBibleChapterJSONP(bookNo,chapter);
+  if(data?.errors?.length)throw new Error(data.errors.map(x=>x.message||x.error||String(x)).join('; '));
+  const rows=Array.isArray(data?.results?.karoli)?data.results.karoli:[];
+  const verses=rows.filter(r=>Number(r.book)===Number(bookNo)&&Number(r.chapter)===Number(chapter)).map(r=>({number:Number(r.verse),verse:Number(r.verse),text:String(r.text||'')}));
+  if(!verses.length)throw new Error('A Biblia online szolgáltatás válaszolt, de nem adott versszöveget ehhez a fejezethez.');
+  const chapterData={number:Number(chapter),verses:verses.sort((a,b)=>a.number-b.number)};
+  try{await idbSet(key,chapterData)}catch(_){/* local cache optional */}
+  return chapterData;
+}
+async function fetchBookWithProgress(bookNo,onProgress,signal){
+  const cached=await idbGet('__BOOK_'+bookNo+'__');
+  if(cached){onProgress(1,0,0,true);return cached;}
+  const url=`https://api.getbible.net/v2/karoli/${bookNo}.json`;
+  let lastErr;
+  for(let attempt=1;attempt<=5;attempt++){
+    try{
+      const r=await fetch(url,{signal,cache:'no-store'});
+      if(!r.ok){
+        if(r.status===429||r.status===503||r.status===502||r.status===504){
+          const wait=Math.min(15000,1000*Math.pow(2,attempt-1));
+          await new Promise((res,rej)=>{const t=setTimeout(res,wait);if(signal)signal.addEventListener('abort',()=>{clearTimeout(t);rej(new DOMException('Aborted','AbortError'));},{once:true});});
+          throw new Error('HTTP '+r.status+' – újrapróbálás');
+        }
+        throw new Error('HTTP '+r.status);
+      }
+      const total=Number(r.headers.get('content-length'))||0;
+      if(!r.body){const data=await r.json();onProgress(1,JSON.stringify(data).length,total,false);await idbSet('__BOOK_'+bookNo+'__',data);return data;}
+      const reader=r.body.getReader();let received=0;const chunks=[];
+      while(true){const part=await reader.read();if(part.done)break;chunks.push(part.value);received+=part.value.byteLength;onProgress(total?received/total:null,received,total,false);}
+      const bytes=new Uint8Array(received);let pos=0;for(const c of chunks){bytes.set(c,pos);pos+=c.length;}
+      const data=JSON.parse(new TextDecoder('utf-8').decode(bytes));
+      if(!data || !Array.isArray(data.chapters))throw new Error('A könyv adata hiányos.');
+      await idbSet('__BOOK_'+bookNo+'__',data);
+      return data;
+    }catch(e){
+      if(e&&e.name==='AbortError')throw e;
+      lastErr=e;
+      if(attempt<5)continue;
+    }
+  }
+  throw lastErr||new Error('Ismeretlen letöltési hiba');
+}
+function chapterVerses(data){return data?.verses||data?.chapter?.verses||[];}
+async function loadBibleChapter(index,chapter){const b=BIBLE_BOOKS[index];const box=document.getElementById('bibleLibraryBox');box.innerHTML='<div class="bible-library-box"><div>⏳ Fejezet betöltése…</div></div>';try{const data=await fetchBibleChapter(index+1,chapter);const verses=chapterVerses(data);box.innerHTML=`<div class="bible-library-box"><div class="bible-controls"><button class="btn" onclick="showBibleChapters(${index})">← Fejezetek</button><button class="btn" onclick="speakChapter()">▶️ Hangos start</button><button class="btn" onclick="pauseSpeech()">⏸️ Szünet</button><button class="btn" onclick="resumeSpeech()">▶️ Folytatás</button><button class="btn" onclick="stopSpeech()">⏹️ Stop</button></div><h2 style="margin:4px 0 10px">${escapeHtml(b[1])} ${chapter}</h2><div id="chapterText">${verses.map(v=>`<div class="bible-verse"><b>${v.verse||''}</b>${escapeHtml(v.text||v.verseText||'')}</div>`).join('')}</div><div style="margin-top:10px;font-size:11px;opacity:.7">💾 Ez a fejezet már offline is elérhető ezen az eszközön.</div></div>`;window.currentBibleChapterText=verses.map(v=>`${v.verse||''}. ${v.text||v.verseText||''}`).join(' ');window.currentBibleChapterTitle=b[1]+' '+chapter;}catch(e){box.innerHTML=`<div class="bible-library-box"><button class="btn" onclick="showBibleChapters(${index})">← Vissza</button><p>⚠️ Az online Biblia nem tudta betölteni ezt a fejezetet.</p><p style="font-size:12px;opacity:.7">Részletek: ${escapeHtml(e.message||String(e))}</p><button class="btn" onclick="loadBibleChapter(${index},${chapter})">🔄 Újra</button></div>`;}}
+let bibleOfflineAbort=null;
+function fmtBytes(n){if(!n)return '0 B';const u=['B','KB','MB','GB'];const i=Math.min(Math.floor(Math.log(n)/Math.log(1024)),u.length-1);return (n/Math.pow(1024,i)).toFixed(i?1:0)+' '+u[i];}
+function fmtTime(sec){if(!isFinite(sec)||sec<0)return '—';sec=Math.round(sec);if(sec<60)return sec+' mp';const m=Math.floor(sec/60),s=sec%60;if(m<60)return m+' p '+String(s).padStart(2,'0')+' mp';const h=Math.floor(m/60);return h+' ó '+String(m%60).padStart(2,'0')+' p';}
+function stopBibleOfflineDownload(){if(bibleOfflineAbort){bibleOfflineAbort.abort();}}
+async function downloadWholeBibleOffline(){
+ const st=document.getElementById('bibleLibraryStatus'), startBtn=document.getElementById('startBibleDownloadBtn'), stopBtn=document.getElementById('stopBibleDownloadBtn');
+ if(!st||!startBtn||!stopBtn||bibleOfflineAbort)return;
+ const totalChapters=BIBLE_BOOKS.reduce((a,b)=>a+b[2],0), started=Date.now();
+ let completedChapters=0, receivedTotal=0, speed=0, eta=null, currentText='Előkészítés…', completedBooks=0, failedBooks=[];
+ const completed=[];
+ bibleOfflineAbort=new AbortController(); const signal=bibleOfflineAbort.signal;
+ st.style.display='block'; startBtn.disabled=true; startBtn.style.opacity='.5'; stopBtn.style.display='inline-block';
+ const render=(bookFraction=0)=>{
+   const elapsed=(Date.now()-started)/1000;
+   speed=elapsed>0?receivedTotal/elapsed:0;
+   const progress=Math.min(1,(completedChapters + bookFraction*(BIBLE_BOOKS[completedBooks]?.[2]||0))/totalChapters);
+   eta=(progress>0 && progress<1)?elapsed*(1/progress-1):0;
+   const pct=(progress*100).toFixed(1);
+   st.innerHTML=`<div style="font-size:20px;font-weight:900;margin-bottom:10px">📥 Biblia offline letöltése — könyvenként</div><div style="height:34px;background:#020617;border:2px solid #64748b;border-radius:999px;overflow:hidden;box-shadow:inset 0 2px 8px rgba(0,0,0,.7)"><div style="height:100%;width:${progress*100}%;background:linear-gradient(90deg,#15803d,#22c55e,#86efac,#22c55e,#15803d);background-size:250% 100%;animation:offlinePulse 1s linear infinite;transition:width .12s ease"></div></div><div style="display:flex;justify-content:space-between;gap:8px;margin-top:8px;font-weight:900;font-size:18px"><span>${pct}%</span><span>${completedChapters} / ${totalChapters} fejezet</span></div><div style="margin-top:8px;color:#e2e8f0;min-height:24px;font-weight:700">${currentText}</div><div style="margin-top:7px;font-size:13px;color:#cbd5e1">Sebesség: ${fmtBytes(speed)}/s • Hátralévő idő: ${eta?fmtTime(eta):'számítás…'} • Könyvek: ${completedBooks}/66 • Hibák: ${failedBooks.length}</div>`;
+ };
+ render(0); await new Promise(r=>requestAnimationFrame(r));
+ try{
+   for(let bi=0;bi<BIBLE_BOOKS.length;bi++){
+     if(signal.aborted)throw new DOMException('Aborted','AbortError');
+     const b=BIBLE_BOOKS[bi];
+     currentText=`⬇️ ${bi+1}/66 — ${b[1]} (${b[2]} fejezet) letöltése…`; render(0);
+     const before=receivedTotal;
+     try{
+       const data=await fetchBookWithProgress(bi+1,(frac,got,total,cached)=>{
+         if(!cached) receivedTotal=before+got;
+         const fracSafe=frac==null?0:frac;
+         currentText=`⬇️ ${bi+1}/66 — ${b[1]} • ${fmtBytes(got)}${total?' / '+fmtBytes(total):''}`;
+         render(fracSafe);
+       },signal);
+       completedBooks++; completedChapters+=b[2]; completed.push(bi);
+       currentText=`✅ ${b[1]} kész — ${completedChapters}/${totalChapters} fejezet offline mentve.`;
+       render(0);
+       await new Promise(r=>setTimeout(r,80));
+     }catch(e){
+       if(e&&e.name==='AbortError')throw e;
+       failedBooks.push({bi,error:e});
+       currentText=`⚠️ ${b[1]} most nem sikerült (${e&&e.message?e.message:'ismeretlen hiba'}). Újraindításkor csak ezt a könyvet próbáljuk újra.`;
+       render(0);
+       await new Promise(r=>setTimeout(r,300));
+     }
+   }
+   if(failedBooks.length){
+     const names=failedBooks.map(x=>BIBLE_BOOKS[x.bi][1]).join(', ');
+     currentText=`⚠️ ${completedBooks}/66 könyv elkészült. Kimaradt: ${names}. Nyomd meg újra a letöltést; a kész könyveket nem tölti újra.`; render(0);
+     st.innerHTML+=`<div style="margin-top:10px;padding:10px;border-radius:10px;background:#78350f;color:#fef3c7;font-weight:900">A letöltés nem állt le a hibánál. A sikeres könyvek megmaradtak, és a következő indítás csak a hiányzó könyveket próbálja meg.</div>`;
+   }else{
+     completedChapters=totalChapters; completedBooks=66; currentText='🎉 Mind a 66 könyv sikeresen offline elmentve.'; render(0);
+     st.innerHTML+=`<div style="margin-top:10px;padding:10px;border-radius:10px;background:#14532d;color:#dcfce7;font-weight:900">✅ KÉSZ! A teljes Biblia offline használható. A 66 könyv külön-külön került letöltésre, ezért egyetlen óriási letöltés hibája nem tudja elrontani az egészet.</div>`;
+   }
+ }catch(e){
+   if(e&&e.name==='AbortError'){currentText='⛔ A letöltést leállítottad. A már kész könyvek megmaradnak.';render(0);}
+   else{currentText='❌ Váratlan hiba: '+(e&&e.message?e.message:'ismeretlen hiba');render(0);}
+ }finally{bibleOfflineAbort=null;stopBtn.style.display='none';startBtn.disabled=false;startBtn.style.opacity='1';}
+}
+async function clearBibleOffline(){if(!confirm('Töröljem az ezen az eszközön tárolt offline Bibliát?'))return;const db=await idbOpen();await new Promise((res,rej)=>{const q=db.transaction('chapters','readwrite').objectStore('chapters').clear();q.onsuccess=res;q.onerror=rej;});const st=document.getElementById('bibleLibraryStatus');if(st)st.textContent='🧹 Az offline Biblia törölve.';}
+async function openBible(ref){
+  const p=parseBibleRef(ref), box=document.getElementById('bibleBox');
+  document.getElementById('bibleModal').classList.add('open');
+  box.innerHTML='<div style="position:relative;max-height:82vh;overflow:auto;padding-top:42px"><button class="btn" style="position:absolute;left:0;top:0;background:#334155;font-size:14px;font-weight:900" onclick="closeBibleModal()">← Vissza a jegyzethez</button><div style="padding:10px">⏳ Biblia-vers betöltése…</div></div>';
+  if(!p){box.innerHTML=`<div style="position:relative;padding-top:42px"><button class="btn" style="position:absolute;left:0;top:0;background:#334155;font-weight:900" onclick="closeBibleModal()">← Vissza a jegyzethez</button><h3>📖 ${escapeHtml(ref)}</h3><p>Nem tudtam automatikusan felismerni ezt a hivatkozást.</p><button class="btn" onclick="openBibleLibrary()">Teljes Biblia megnyitása</button></div>`;return;}
+  try{
+    const data=await fetchBibleChapter(BIBLE_BOOKS.indexOf(p.book)+1,p.chapter), verses=chapterVerses(data);
+    const chosen=verses.filter(v=>{const n=+(v.verse||v.number);return n>=p.verse&&n<=p.endVerse});
+    const text=chosen.map(v=>v.text||v.verseText||'').join(' ');
+    box.innerHTML=`<div style="position:relative;max-height:82vh;overflow:auto;padding-top:44px"><button class="btn" style="position:absolute;left:0;top:0;background:#334155;font-weight:900" onclick="closeBibleModal()">← Vissza a jegyzethez</button><h3 style="margin:0 0 8px;color:#60a5fa">📖 ${escapeHtml(p.book[1])} ${p.chapter}:${p.verse}${p.endVerse!==p.verse?'-'+p.endVerse:''}</h3>${chosen.map(v=>`<div class="bible-verse"><b>${v.verse||''}</b>${escapeHtml(v.text||v.verseText||'')}</div>`).join('')}<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="speakBibleFromButton(this)">▶️ Hangos start</button><button class="btn" onclick="pauseSpeech()">⏸️ Szünet</button><button class="btn" onclick="resumeSpeech()">▶️ Folytatás</button><button class="btn" onclick="stopSpeech()">⏹️ Stop</button><button class="btn" onclick="closeBibleModal()">✖️ Vissza a jegyzethez</button></div><div id="speechStatus" style="font-size:11px;margin-top:8px;color:#94a3b8">🔊 Magyar hang keresése…</div></div>`;
+    window.currentBibleReferenceText=text;
+    setSpeechStatus();
+  }catch(e){box.innerHTML=`<div style="position:relative;padding-top:44px"><button class="btn" style="position:absolute;left:0;top:0;background:#334155;font-weight:900" onclick="closeBibleModal()">← Vissza a jegyzethez</button><h3>📖 ${escapeHtml(ref)}</h3><p>⚠️ Az online Biblia nem tudta betölteni ezt a hivatkozást.</p><p style="font-size:12px;opacity:.7">Részletek: ${escapeHtml(e.message||String(e))}</p><button class="btn" onclick="openBibleLibrary()">📖 Biblia megnyitása</button></div>`;}
+}
+function closeBibleModal(){stopSpeech();document.getElementById('bibleModal').classList.remove('open');}
+let v26SpeechQueue=[],v26SpeechIndex=0,v26SpeechStopped=false,v26SpeechRunId=0;
+function v26PickHungarianVoice(){
+  const ss=window.speechSynthesis;if(!ss)return null;const voices=ss.getVoices?ss.getVoices():[];
+  return voices.find(v=>/dóra|dora/i.test(v.name||''))||voices.find(v=>/^hu(-|_)?HU/i.test(v.lang||''))||voices.find(v=>/^hu/i.test(v.lang||''))||null;
+}
+function v26SpeechChunks(text){const t=String(text||'').replace(/\s+/g,' ').trim();if(!t)return[];const max=180,out=[];let rest=t;while(rest.length>max){let cut=rest.lastIndexOf('. ',max);if(cut<80)cut=rest.lastIndexOf(' ',max);if(cut<40)cut=max;out.push(rest.slice(0,cut+((rest[cut]==='.')?1:0)).trim());rest=rest.slice(cut+((rest[cut]==='.')?1:0)).trim();}if(rest)out.push(rest);return out;}
+function setSpeechStatus(msg){const el=document.getElementById('speechStatus');if(!el)return;const ss=window.speechSynthesis;if(!ss){el.textContent='⚠️ Ezen a böngészőn nincs elérhető beszédszolgáltatás.';return;}const voice=v26PickHungarianVoice();el.textContent=msg||('🔊 '+(voice?('Hang: '+voice.name):'Magyar hang kiválasztása automatikusan'))}
+function pauseSpeech(){if(window.speechSynthesis)window.speechSynthesis.pause();setSpeechStatus('⏸️ Szüneteltetve');}
+function resumeSpeech(){if(window.speechSynthesis)window.speechSynthesis.resume();setSpeechStatus('▶️ Folytatás');}
+function stopSpeech(){v26SpeechStopped=true;v26SpeechRunId++;v26SpeechQueue=[];v26SpeechIndex=0;if(window.speechSynthesis)window.speechSynthesis.cancel();setSpeechStatus('⏹️ Leállítva');}
+function speakBibleFromButton(btn){
+  const text=window.currentBibleReferenceText||'';if(!text)return;
+  const ss=window.speechSynthesis;
+  if(!ss||typeof window.SpeechSynthesisUtterance==='undefined'){alert('Ezen a böngészőn a hangos Biblia nem érhető el.');return;}
+  ss.cancel();v26SpeechStopped=false;v26SpeechRunId++;const run=v26SpeechRunId;v26SpeechQueue=v26SpeechChunks(text);v26SpeechIndex=0;setSpeechStatus('▶️ Felolvasás indul…');
+  const playNext=()=>{if(run!==v26SpeechRunId||v26SpeechStopped||v26SpeechIndex>=v26SpeechQueue.length)return;const u=new SpeechSynthesisUtterance(v26SpeechQueue[v26SpeechIndex++]);u.lang='hu-HU';u.rate=.92;u.pitch=1;const voice=v26PickHungarianVoice();if(voice)u.voice=voice;u.onstart=()=>setSpeechStatus('🔊 '+(voice?voice.name:'Magyar hang')+' • felolvasás');u.onend=()=>setTimeout(playNext,30);u.onerror=()=>{if(run===v26SpeechRunId&&!v26SpeechStopped){setSpeechStatus('⚠️ A böngésző hangszolgáltatása hibát jelzett.');}};ss.speak(u);};
+  // iOS/Safari can populate voices asynchronously; the actual speak() remains in this button click handler.
+  playNext();
+}
+function speakText(t){window.currentBibleReferenceText=String(t||'');speakBibleFromButton(null);}
+function speakChapter(){if(!window.currentBibleChapterText)return;window.currentBibleReferenceText=window.currentBibleChapterText;speakBibleFromButton(null);}
+function speakNote(){speakText(document.getElementById('editor').innerText);}
+if(window.speechSynthesis&&typeof window.speechSynthesis.addEventListener==='function')window.speechSynthesis.addEventListener('voiceschanged',()=>setSpeechStatus());
+
+function getContrastColor(hex){
+  // hex to luminance
+  if(!hex) return '#e5e7eb';
+  hex=hex.replace('#','');
+  if(hex.length===3) hex=hex.split('').map(c=>c+c).join('');
+  const r=parseInt(hex.substr(0,2),16), g=parseInt(hex.substr(2,2),16), b=parseInt(hex.substr(4,2),16);
+  const lum=(0.299*r + 0.587*g + 0.114*b)/255;
+  return lum>0.6 ? '#111827' : '#e5e7eb';
+}
+function colorPage(col){
+  const ed=document.getElementById('editor');
+  ed.style.setProperty('--page',col);
+  ed.style.background=col;
+  const txtColor=getContrastColor(col);
+  ed.style.color=txtColor;
+  if(txtColor==='#111827'){ed.classList.add('light'); ed.classList.remove('dark');}
+  else {ed.classList.add('dark'); ed.classList.remove('light');}
+  // save for notes
+  ed.dataset.pageColor=col;
+  ed.dataset.textColor=txtColor;
+}
+function changeFontColor(col){
+  const ed=document.getElementById('editor');
+  ed.style.color=col;
+  document.execCommand('foreColor',false,col);
+  ed.dataset.textColor=col;
+}
+
+// --- BROWSER MUKODES FIX - JW, YT, WIKI ---
+function loadURL(u){
+  if(!u) return;
+  let url=u.trim();
+  if(!url.startsWith('http')) url='https://'+url;
+  document.getElementById('urlInput').value=url;
+  const frame=document.getElementById('webFrame');
+  const status=document.getElementById('browserStatus');
+  // YouTube special handling -> embed
+  if(url.includes('youtube.com/watch') || url.includes('youtu.be')){
+    let vid='';
+    if(url.includes('v=')) vid=url.split('v=')[1].split('&')[0];
+    else if(url.includes('youtu.be/')) vid=url.split('youtu.be/')[1].split('?')[0];
+    if(vid){
+      frame.src='https://www.youtube-nocookie.com/embed/'+vid;
+      status.innerHTML='▶️ YouTube betöltve embed módban - működik!';
+      return;
+    }
+  }
+  if(url.includes('youtube.com')){
+    frame.src=url.replace('youtube.com','youtube-nocookie.com');
+    status.innerHTML='▶️ YouTube - ha nem megy, katt: Megnyitás új lapon';
+    return;
+  }
+  // Try iframe
+  frame.src=url;
+  status.innerHTML='🌐 Betöltés: '+url+'<br>Ha fehér marad (JW.org tiltja iframe-et), használd a "Megnyitás új lapon" gombot - onnan másold vissza!';
+  // fallback check
+  setTimeout(()=>{
+    try{
+      if(frame.contentDocument && frame.contentDocument.body && frame.contentDocument.body.innerHTML.length<50){
+        status.innerHTML+='<br><b style="color:#fbbf24">⚠️ Ez az oldal tiltja a beágyazást (JW.org, Google). Nyisd új lapon!</b>';
+      }
+    }catch(e){
+      // cross-origin - can't check, assume ok or blocked
+    }
+  },2000);
+}
+function openInNewTab(){
+  const u=document.getElementById('urlInput').value || document.getElementById('webFrame').src;
+  if(u) window.open(u,'_blank');
+}
+function insertFromBrowser(){
+  const u=document.getElementById('urlInput').value||document.getElementById('webFrame').src;
+  const title=document.getElementById('urlInput').value;
+  document.execCommand('insertHTML',false,`<div style="border:1px solid #334155;padding:8px;border-radius:8px;margin:8px 0;background:#1f2937">🌐 <a href="${u}" target="_blank" style="color:#60a5fa;font-weight:700">${u}</a><br><span style="font-size:11px;opacity:.7">${title}</span><br><button onclick="window.open('${u}','_blank')" style="margin-top:4px;padding:4px 8px;border-radius:6px;background:#3b82f6;color:#fff;border:0">Megnyitás</button></div>`);
+}
+function loadJW(){ loadURL('https://www.jw.org/hu/'); }
+function loadJWLib(){ loadURL('https://wol.jw.org/hu/'); }
+function loadWiki(){ loadURL('https://hu.wikipedia.org/wiki/Kezd%C5%91lap'); }
+function loadYouTube(){ loadURL('https://www.youtube.com'); }
+function loadGoogle(){ loadURL('https://www.google.com'); }
+
+
+// --- CALC ---
+
+function showCalcTab(name){
+  document.querySelectorAll('.calcTab').forEach(t=>t.style.display='none');
+  const el=document.getElementById('tab-'+name);
+  if(el) el.style.display='block';
+}
+function insertCalc(ch){ const inp=document.getElementById('calcInput') || document.getElementById('calcInputBasic'); if(inp){ inp.value+=ch; inp.focus(); } }
+function toggleWikiEnlarge(){ const f=document.getElementById('webFrame'); f.classList.toggle('enlarged'); }
+
+function calc(){
+  const inpEl=document.getElementById('calcInput');
+  const inp=inpEl.value.toLowerCase().trim();
+  let r='';
+  if(!inp){ document.getElementById('calcRes').innerHTML='Írj valamit!'; return; }
+  try{
+    if(inp.includes('pitagorasz')){
+      const n=inp.match(/[\d.]+/g);
+      if(n&&n.length>=2){ const a=parseFloat(n[0]),b=parseFloat(n[1]); r=`c = √(a²+b²) = ${Math.sqrt(a*a+b*b).toFixed(6)}`; }
+    }else if(inp.includes('fényév')){
+      const n=parseFloat(inp)||1; r=`${n} fényév = ${(n*9.461e12).toExponential(6)} km = ${(n*63241).toFixed(1)} AU`;
+    }else if(inp.includes('bin')||inp.includes('binary')){
+      const num=parseInt(inp); r=`${num} dec = ${num.toString(2)} bin = ${num.toString(16).toUpperCase()} hex`;
+    }else{
+      // safe eval with math
+      let expr=inp.replace(/\^/g,'**').replace(/sqrt\(/g,'Math.sqrt(').replace(/cbrt\(/g,'Math.cbrt(').replace(/cos\(/g,'Math.cos(').replace(/sin\(/g,'Math.sin(').replace(/tan\(/g,'Math.tan(').replace(/log\(/g,'Math.log10(').replace(/ln\(/g,'Math.log(').replace(/pi/g,'Math.PI').replace(/e\b/g,'Math.E');
+      // fok -> radian ha cos(30) ertelmezes: ha kis szam, feltetelezzuk fokot
+      expr=expr.replace(/Math\.cos\((\d+\.?\d*)\)/g,(m,p)=>`Math.cos(${p}*Math.PI/180)`);
+      expr=expr.replace(/Math\.sin\((\d+\.?\d*)\)/g,(m,p)=>`Math.sin(${p}*Math.PI/180)`);
+      expr=expr.replace(/Math\.tan\((\d+\.?\d*)\)/g,(m,p)=>`Math.tan(${p}*Math.PI/180)`);
+      r=eval(expr);
+    }
+  }catch(e){ r='Hiba: '+e.message; }
+  document.getElementById('calcRes').innerHTML=`<b style="color:#0f0">▶ ${inp} = ${r}</b>`;
+  window.lastCalcResult=r;
+}
+function insertCalcResult(){ if(window.lastCalcResult!==undefined){ document.execCommand('insertHTML',false,`<div style="font-size:12px;background:#111827;border-left:3px solid #22c55e;padding:4px 8px;border-radius:4px;margin:6px 0">🧮 ${document.getElementById('calcInput').value} = <b>${window.lastCalcResult}</b></div>`); } }
+function calcBasic(){ const v=document.getElementById('calcInputBasic').value; document.getElementById('calcInput').value=v; calc(); }
+function solveQuad(){ const a=parseFloat(document.getElementById('algA').value)||1, b=parseFloat(document.getElementById('algB').value)||0, c=parseFloat(document.getElementById('algC').value)||0; const D=b*b-4*a*c; let res=''; if(D>0){ const x1=(-b+Math.sqrt(D))/(2*a), x2=(-b-Math.sqrt(D))/(2*a); res=`D=${D} >0 → x₁=${x1.toFixed(4)}, x₂=${x2.toFixed(4)}`; }else if(D===0){ res=`D=0 → x=${(-b/(2*a)).toFixed(4)}`; }else{ res=`D=${D} <0 → komplex: x₁=${(-b/(2*a)).toFixed(2)}+${(Math.sqrt(-D)/(2*a)).toFixed(2)}i, x₂=${(-b/(2*a)).toFixed(2)}-${(Math.sqrt(-D)/(2*a)).toFixed(2)}i`; } document.getElementById('algRes').innerHTML=res; document.getElementById('calcInput').value=`quad ${a},${b},${c} → ${res}`; window.lastCalcResult=res; }
+function updateGeo(){ const sel=document.getElementById('geoShape').value; const cont=document.getElementById('geoInputs'); if(sel==='square') cont.innerHTML='a: <input id="ga" type="number" value="5" style="width:60px">'; else if(sel==='rect') cont.innerHTML='a: <input id="ga" type="number" value="5" style="width:60px"> b: <input id="gb" type="number" value="3" style="width:60px">'; else if(sel==='circle') cont.innerHTML='r: <input id="ga" type="number" value="5" style="width:60px">'; else if(sel==='triangle') cont.innerHTML='a: <input id="ga" type="number" value="3" style="width:50px"> b: <input id="gb" type="number" value="4" style="width:50px"> c: <input id="gc" type="number" value="5" style="width:50px">'; else if(sel==='cube') cont.innerHTML='a: <input id="ga" type="number" value="5" style="width:60px">'; else if(sel==='sphere') cont.innerHTML='r: <input id="ga" type="number" value="5" style="width:60px">'; }
+function calcGeo(){ const sel=document.getElementById('geoShape').value; let res=''; const a=parseFloat(document.getElementById('ga')?.value)||0, b=parseFloat(document.getElementById('gb')?.value)||0, c=parseFloat(document.getElementById('gc')?.value)||0; if(sel==='square') res=`Terület=${a*a}, Kerület=${4*a}, Átló=${(a*Math.sqrt(2)).toFixed(3)}`; else if(sel==='rect') res=`Terület=${a*b}, Kerület=${2*(a+b)}, Átló=${Math.sqrt(a*a+b*b).toFixed(3)}`; else if(sel==='circle') res=`Terület=${(Math.PI*a*a).toFixed(3)}, Kerület=${(2*Math.PI*a).toFixed(3)}, Átmérő=${2*a}`; else if(sel==='triangle'){ const s=(a+b+c)/2; const area=Math.sqrt(s*(s-a)*(s-b)*(s-c)); res=`Kerület=${a+b+c}, Terület=${area.toFixed(3)} (Heron)`; } else if(sel==='cube') res=`Térfogat=${a*a*a}, Felszín=${6*a*a}, Testátló=${(a*Math.sqrt(3)).toFixed(3)}`; else if(sel==='sphere') res=`Térfogat=${((4/3)*Math.PI*a*a*a).toFixed(3)}, Felszín=${(4*Math.PI*a*a).toFixed(3)}`; document.getElementById('geoRes').innerHTML=res; window.lastCalcResult=res; }
+function calcTrig(type){ const deg=parseFloat(document.getElementById('trigDeg').value)||0; const rad=deg*Math.PI/180; let res=0; if(type==='sin') res=Math.sin(rad); else if(type==='cos') res=Math.cos(rad); else if(type==='tan') res=Math.tan(rad); else if(type==='asin'){ const v=Math.asin(deg)*180/Math.PI; res=`asin(${deg})=${v.toFixed(4)}°`; document.getElementById('trigRes').innerHTML=res; window.lastCalcResult=res; return; } else if(type==='acos'){ const v=Math.acos(deg)*180/Math.PI; res=`acos(${deg})=${v.toFixed(4)}°`; document.getElementById('trigRes').innerHTML=res; window.lastCalcResult=res; return; } else if(type==='atan'){ const v=Math.atan(deg)*180/Math.PI; res=`atan(${deg})=${v.toFixed(4)}°`; document.getElementById('trigRes').innerHTML=res; window.lastCalcResult=res; return; } document.getElementById('trigRes').innerHTML=`${type}(${deg}°) = ${res.toFixed(6)} (rad: ${rad.toFixed(4)})`; window.lastCalcResult=res; }
+function calcPyth(){ const a=parseFloat(document.getElementById('pyA').value)||0, b=parseFloat(document.getElementById('pyB').value)||0; const c=Math.sqrt(a*a+b*b); document.getElementById('pythRes').innerHTML=`a=${a}, b=${b} → c=√(a²+b²)=${c.toFixed(6)}`; window.lastCalcResult=c; }
+function calcPythAB(){ const b=parseFloat(document.getElementById('pyB').value)||0, c=parseFloat(document.getElementById('pyC').value)||0; const a=Math.sqrt(c*c-b*b); document.getElementById('pythRes').innerHTML=`c=${c}, b=${b} → a=√(c²-b²)=${a.toFixed(6)}`; window.lastCalcResult=a; }
+function calcRoot(type){ const n=parseFloat(document.getElementById('rootNum').value)||0, exp=parseFloat(document.getElementById('powExp').value)||2; let r=0; if(type==='sqrt') r=Math.sqrt(n); else if(type==='cbrt') r=Math.cbrt(n); else if(type==='square') r=n*n; else if(type==='cube') r=n*n*n; else if(type==='pow') r=Math.pow(n,exp); else if(type==='log') r=Math.log10(n); else if(type==='ln') r=Math.log(n); else if(type==='fact'){ r=1; for(let i=2;i<=n;i++) r*=i; } document.getElementById('rootRes').innerHTML=`${type}(${n}) = ${r}`; window.lastCalcResult=r; }
+function calcStar(){ const inp=document.getElementById('starInput').value.toLowerCase(); let r=''; if(inp.includes('fényév')){ const n=parseFloat(inp)||1; r=`${n} fényév = ${(n*9.461e12).toExponential(4)} km = ${(n*63241).toFixed(1)} AU = ${(n*0.3066).toFixed(4)} parszek`; } else if(inp.includes('au')){ const n=parseFloat(inp)||1; r=`${n} AU = ${(n*149.6e6).toFixed(0)} km = ${(n/63241).toFixed(6)} fényév`; } else if(inp.includes('c=')||inp.includes('e=mc')){ r='E=mc², c=299792458 m/s'; } else { r='Ismeretlen: írd pl. "2 fényév", "1 AU km", "5 kg N"'; } document.getElementById('starRes').innerHTML=r; window.lastCalcResult=r; }
+function calcBinary(){ const txt=document.getElementById('binInput').value.trim(); let num; if(/^[01]+$/.test(txt)) num=parseInt(txt,2); else if(/^[0-9a-fA-F]+$/.test(txt) && txt.match(/[a-fA-F]/)) num=parseInt(txt,16); else num=parseInt(txt,10); if(isNaN(num)){ document.getElementById('binRes').innerHTML='Hiba'; return; } document.getElementById('binRes').innerHTML=`Dec: ${num}<br>Bin: ${num.toString(2)}<br>Hex: ${num.toString(16).toUpperCase()}<br>Oct: ${num.toString(8)}<br>ASCII: ${num>=32&&num<=126?String.fromCharCode(num):'-'}<br>Byte: ${(num/1024).toFixed(2)} KB`; window.lastCalcResult=num; }
+// init geo
+setTimeout(()=>{ try{updateGeo();}catch(e){} },500);
+
+
+// --- AI ---
+function runAI(){const q=document.getElementById('aiInput').value; const out=document.getElementById('aiOut'); if(!q) return; let resp=''; if(q.toLowerCase().includes('bővít')) resp='Kibővítve: Ez a jegyzet mélyebb értelmet kap Isten szeretete által... (AI segített)'; else if(q.toLowerCase().includes('összefoglal')) resp='Összefoglaló: A jegyzet lényege Isten ígéreteiről szól.'; else resp=`AI ötlet a(z) "${q}" témára: Írj egy kis rubrikát, adj hozzá egy 1Mózes 1:1 hivatkozást és egy képet!`; out.innerText=resp; document.execCommand('insertHTML',false,`<div style="background:#1f2937;padding:6px;border-radius:6px;margin:6px 0">🤖 ${resp}</div>`);}
+
+// --- MENTETT JEGYZETEK: AUTOMATIKUS MENTÉS + CÍM + DÁTUM + HOSSZÚ NYOMÁS ---
+function shareNote(){const ed=document.getElementById('editor');const title=notePlainText(ed.innerHTML).slice(0,45)||'V26 jegyzet';const html='<!doctype html><html lang="hu"><meta charset="utf-8"><title>'+escapeHtml(title)+'</title><style>body{font-family:Arial;padding:20px;line-height:1.6}.bible-ref{color:#2563eb;font-weight:700;cursor:pointer}</style><body>'+ed.innerHTML+'<script>document.querySelectorAll(".bible-ref").forEach(e=>e.onclick=()=>alert("Biblia-hivatkozás: "+e.dataset.ref+"\nNyisd meg a V26 Biblia alkalmazásban a teljes vershez."))<\/script></body></html>';const blob=new Blob([html],{type:'text/html'});const file=new File([blob],title.replace(/[^a-z0-9áéíóöőúüű -]/gi,'_')+'.html',{type:'text/html'});if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){navigator.share({title,text:'Biblia-jegyzet',files:[file]}).catch(()=>{});}else if(navigator.share){navigator.share({title,text:ed.innerText}).catch(()=>{});}else{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=file.name;a.click();}}
+
+let notes=JSON.parse(localStorage.getItem('v26fix')||'[]');
+let currentEditId=null;
+let autoSaveTimer=null;
+let githubSyncTimer=null;
+let githubSyncBusy=false;
+let githubEditorDirty=false;
+let githubPollTimer=null;
+let githubLastSha=null;
+let githubLastRemoteUpdated=0;
+const GITHUB_CONFIG_KEY='v26githubConfig';
+const GITHUB_DATA_VERSION=1;
+
+function notePlainText(html){const d=document.createElement('div');d.innerHTML=html||'';return (d.innerText||d.textContent||'').replace(/\s+/g,' ').trim();}
+function makeNoteTitle(html){return notePlainText(html).slice(0,45)||'Jegyzet';}
+function dateText(ts){return new Date(ts||Date.now()).toLocaleString('hu-HU',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});}
+function persistNotes(){localStorage.setItem('v26fix',JSON.stringify(notes));renderNotes();}
+function upsertCurrentNote(){
+  const ed=document.getElementById('editor'); if(!ed)return null; const c=ed.innerHTML; if(!notePlainText(c))return null; const now=Date.now();
+  if(currentEditId){const idx=notes.findIndex(x=>String(x.id)===String(currentEditId));if(idx>-1){notes[idx].content=c;notes[idx].title=makeNoteTitle(c);notes[idx].updated=now;notes[idx].color=ed.style.background||notes[idx].color||'#0f0f23';return notes[idx];}}
+  const n={id:now,title:makeNoteTitle(c),content:c,created:now,updated:now,color:ed.style.background||'#0f0f23'};notes.unshift(n);currentEditId=n.id;return n;
+}
+function getGitHubConfig(){try{return JSON.parse(localStorage.getItem(GITHUB_CONFIG_KEY)||'null')}catch(e){return null}}
+function setGitHubStatus(msg,ok=false){const el=document.getElementById('githubStatus');if(el){el.textContent=msg;el.style.color=ok?'#86efac':'#fbbf24';}}
+function saveNoteAuto(){
+  const n=upsertCurrentNote();
+  if(n){
+    persistNotes();
+    localStorage.setItem('v26auto',JSON.stringify(n));
+    scheduleGitHubSync();
+  }
+  return n;
+}
+function scheduleGitHubSync(){
+  clearTimeout(githubSyncTimer);
+  const cfg=getGitHubConfig();
+  if(!cfg||!cfg.token||!cfg.owner||!cfg.repo)return;
+  githubSyncTimer=setTimeout(()=>githubSync(false),1200);
+}
+function saveBeforeLeave(){
+  try{
+    const n=saveNoteAuto();
+    if(n && getGitHubConfig()) githubSync(true);
+  }catch(e){}
+}
+function openGitHubSettings(){
+  const box=document.getElementById('githubSettings'); if(!box)return;
+  const c=getGitHubConfig()||{};
+  const fieldMap={ghOwner:'owner',ghRepo:'repo',ghBranch:'branch',ghPath:'path'}; Object.keys(fieldMap).forEach(id=>{const el=document.getElementById(id);const key=fieldMap[id];if(el&&c[key]!=null)el.value=c[key];});
+  const tok=document.getElementById('ghToken'); if(tok)tok.value=c.token||'';
+  box.style.display=box.style.display==='none'?'block':'none';
+  if(box.style.display==='block') setGitHubStatus(c.token?'GitHub: beállítva — automatikus szinkron aktív.':'GitHub: nincs beállítva.');
+}
+function saveGitHubSettings(){
+  const c={owner:document.getElementById('ghOwner').value.trim(),repo:document.getElementById('ghRepo').value.trim(),branch:(document.getElementById('ghBranch').value.trim()||'main'),path:(document.getElementById('ghPath').value.trim()||'v26-notes.json'),token:document.getElementById('ghToken').value.trim()};
+  if(!c.owner||!c.repo||!c.token){setGitHubStatus('❗ Add meg a GitHub felhasználót, repositoryt és a tokent.');return;}
+  localStorage.setItem(GITHUB_CONFIG_KEY,JSON.stringify(c));
+  startGitHubPolling();
+  setGitHubStatus('GitHub: beállítás elmentve — automatikus szinkron aktív.',true);
+  githubSync(false);
+}
+function clearGitHubSettings(){localStorage.removeItem(GITHUB_CONFIG_KEY);githubLastSha=null;clearInterval(githubPollTimer);setGitHubStatus('GitHub: kapcsolat törölve.');}
+function githubApiUrl(c){return `https://api.github.com/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/contents/${c.path.split('/').map(encodeURIComponent).join('/')}?ref=${encodeURIComponent(c.branch)}`;}
+function githubHeaders(c){return {'Accept':'application/vnd.github+json','Authorization':'Bearer '+c.token,'X-GitHub-Api-Version':'2022-11-28','Content-Type':'application/json'};}
+function bytesToBase64Utf8(text){
+  const bytes=new TextEncoder().encode(text); let bin=''; for(let i=0;i<bytes.length;i+=0x8000)bin+=String.fromCharCode(...bytes.subarray(i,i+0x8000)); return btoa(bin);
+}
+function base64ToUtf8(b64){
+  const bin=atob(b64.replace(/\n/g,'')); const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0)); return new TextDecoder().decode(bytes);
+}
+function githubPayload(){
+  const cleanNotes=notes.map(n=>({id:n.id,title:n.title,content:n.content,created:n.created,updated:n.updated,color:n.color||'#0f0f23'}));
+  const updated=Math.max(0,...cleanNotes.map(n=>Number(n.updated)||0));
+  return JSON.stringify({version:GITHUB_DATA_VERSION,updated,notes:cleanNotes},null,2);
+}
+async function githubRead(){
+  const c=getGitHubConfig(); if(!c)return null;
+  const r=await fetch(githubApiUrl(c),{headers:githubHeaders(c),cache:'no-store'});
+  if(r.status===404)return {sha:null,data:null};
+  if(!r.ok)throw new Error('GitHub olvasási hiba: HTTP '+r.status);
+  const j=await r.json(); return {sha:j.sha,data:JSON.parse(base64ToUtf8(j.content||''))};
+}
+async function githubSync(force=false){
+  const c=getGitHubConfig(); if(!c||githubSyncBusy)return false;
+  githubSyncBusy=true;
+  try{
+    let remote=await githubRead();
+    const localUpdated=Math.max(0,...notes.map(n=>Number(n.updated)||0));
+    const remoteUpdated=Number(remote?.data?.updated)||0;
+    if(!force && remote?.data && remoteUpdated>localUpdated){
+      notes=Array.isArray(remote.data.notes)?remote.data.notes:[];
+      localStorage.setItem('v26fix',JSON.stringify(notes)); renderNotes(); githubLastSha=remote.sha; githubLastRemoteUpdated=remoteUpdated;
+      setGitHubStatus('☁️ GitHub → készülék: frissebb adat betöltve.',true); return true;
+    }
+    const payload=githubPayload();
+    const body={message:'V26 automatikus jegyzet-szinkron',content:bytesToBase64Utf8(payload),branch:c.branch};
+    if(remote?.sha)body.sha=remote.sha;
+    let r=await fetch(githubApiUrl(c),{method:'PUT',headers:githubHeaders(c),body:JSON.stringify(body),cache:'no-store'});
+    // 409 = közben megváltozott a GitHub-fájl; újraolvassuk a SHA-t és egyszer újrapróbáljuk.
+    if(r.status===409){
+      remote=await githubRead();
+      const retry={...body};
+      if(remote?.sha)retry.sha=remote.sha;
+      r=await fetch(githubApiUrl(c),{method:'PUT',headers:githubHeaders(c),body:JSON.stringify(retry),cache:'no-store'});
+    }
+    if(!r.ok){let msg='HTTP '+r.status;try{const x=await r.json();if(x.message)msg+=' — '+x.message;}catch(e){}throw new Error(msg);}
+    const out=await r.json(); githubLastSha=out.content?.sha||null; githubLastRemoteUpdated=localUpdated;
+    githubEditorDirty=false; setGitHubStatus('☁️ GitHub: szinkronizálva '+new Date().toLocaleTimeString('hu-HU'),true); return true;
+  }catch(e){
+    setGitHubStatus('⚠️ GitHub szinkron hiba: '+e.message);
+    console.error(e); return false;
+  }finally{githubSyncBusy=false;}
+}
+async function githubManualSync(){
+  const n=saveNoteAuto(); if(!n){alert('Üres a jegyzet, írj valamit!');return;}
+  if(!getGitHubConfig()){openGitHubSettings();setGitHubStatus('❗ Előbb állítsd be a GitHub kapcsolatot.');return;}
+  const ok=await githubSync(true); if(ok)alert('☁️ A jegyzetek felkerültek GitHubra.');
+}
+async function loadFromGitHub(showAlert=false){
+  const c=getGitHubConfig(); if(!c){openGitHubSettings();return false;}
+  try{
+    const remote=await githubRead();
+    if(!remote?.data||!Array.isArray(remote.data.notes)){setGitHubStatus('GitHub: még nincs v26-notes.json, az első mentés létrehozza.',true);return false;}
+    const localUpdated=Math.max(0,...notes.map(n=>Number(n.updated)||0)), remoteUpdated=Number(remote.data.updated)||0;
+    if(remoteUpdated>=localUpdated){
+      notes=remote.data.notes; localStorage.setItem('v26fix',JSON.stringify(notes)); renderNotes(); githubLastSha=remote.sha; githubLastRemoteUpdated=remoteUpdated;
+      setGitHubStatus('🔄 GitHub → készülék: szinkronizálva.',true);
+      if(showAlert)alert('🔄 A GitHubon lévő jegyzetek betöltve.');
+      return true;
+    }
+    setGitHubStatus('Helyi adatok frissebbek; nem írtam felül őket.',true); return false;
+  }catch(e){setGitHubStatus('⚠️ GitHub betöltési hiba: '+e.message);if(showAlert)alert('GitHub betöltési hiba: '+e.message);return false;}
+}
+async function githubPoll(){
+  const c=getGitHubConfig();
+  if(!c||githubSyncBusy||githubEditorDirty)return;
+  try{
+    const remote=await githubRead();
+    if(!remote?.data||!Array.isArray(remote.data.notes))return;
+    const remoteUpdated=Number(remote.data.updated)||0;
+    const localUpdated=Math.max(0,...notes.map(n=>Number(n.updated)||0));
+    if(remoteUpdated>localUpdated){
+      notes=remote.data.notes; localStorage.setItem('v26fix',JSON.stringify(notes)); renderNotes();
+      githubLastSha=remote.sha; githubLastRemoteUpdated=remoteUpdated;
+      setGitHubStatus('🔄 GitHub: új változás érkezett — frissítve.',true);
+    }
+  }catch(e){console.warn('GitHub automatikus frissítés:',e.message);}
+}
+function startGitHubPolling(){
+  clearInterval(githubPollTimer);
+  if(getGitHubConfig()){
+    githubPoll();
+    githubPollTimer=setInterval(githubPoll,5000);
+  }
+}
+function scheduleAutoSave(){clearTimeout(autoSaveTimer);autoSaveTimer=setTimeout(()=>saveNoteAuto(),350);}
+document.addEventListener('input',e=>{if(e.target&&e.target.id==='editor'){githubEditorDirty=true;scheduleAutoSave();}});
+document.addEventListener('blur',e=>{if(e.target&&e.target.id==='editor')saveNoteAuto();},true);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')saveBeforeLeave();});
+window.addEventListener('pagehide',saveBeforeLeave);window.addEventListener('beforeunload',saveBeforeLeave);
+window.addEventListener('online',()=>{if(getGitHubConfig())githubSync(false);});
+function newNote(){saveNoteAuto();const ed=document.getElementById('editor');ed.innerHTML='';ed.dataset.pageColor='#0f0f23';ed.style.background='#0f0f23';ed.style.color='#e5e7eb';ed.classList.add('dark');ed.classList.remove('light');currentEditId=null;ed.focus();}
+function saveNote(){const n=saveNoteAuto();if(!n){alert('Üres a jegyzet, írj valamit!');return;}alert('💾 Jegyzet mentve: '+n.title+'\n📅 '+dateText(n.updated));}
+function openSavedNote(id){const n=notes.find(x=>String(x.id)===String(id));if(!n)return;const ed=document.getElementById('editor');ed.innerHTML=n.content;currentEditId=n.id;if(n.color)ed.style.background=n.color;ed.focus();}
+function deleteSavedNote(id){const n=notes.find(x=>String(x.id)===String(id));if(!n)return;if(confirm('Biztosan törlöd ezt a jegyzetet?\n\n'+n.title)){notes=notes.filter(x=>String(x.id)!==String(id));localStorage.setItem('v26fix',JSON.stringify(notes));if(String(currentEditId)===String(id)){currentEditId=null;document.getElementById('editor').innerHTML='';}renderNotes();scheduleGitHubSync();}}
+function shareSavedNote(id){const n=notes.find(x=>String(x.id)===String(id));if(!n)return;const text=notePlainText(n.content);if(navigator.share)navigator.share({title:n.title,text:text}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(text).then(()=>alert('📋 A jegyzet szövege a vágólapra került.'));else alert(text);}
+function printSavedNote(id){const n=notes.find(x=>String(x.id)===String(id));if(!n)return;const w=window.open('','_blank');if(!w){alert('A nyomtatási ablakot a böngésző blokkolta.');return;}w.document.write(`<!doctype html><html lang="hu"><head><meta charset="utf-8"><title>${escapeHtml(n.title)}</title><style>body{font-family:Arial,sans-serif;padding:30px;color:#111}h1{font-size:24px}small{color:#666}.content{line-height:1.6}</style></head><body><h1>${escapeHtml(n.title)}</h1><small>${dateText(n.updated)}</small><hr><div class="content">${n.content}</div></body></html>`);w.document.close();w.focus();setTimeout(()=>w.print(),250);}
+function escapeHtml(x){return String(x||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+function showNoteActions(id){const n=notes.find(x=>String(x.id)===String(id));if(!n)return;const old=document.getElementById('noteActionMenu');if(old)old.remove();const menu=document.createElement('div');menu.id='noteActionMenu';menu.style.cssText='position:fixed;z-index:10000;left:50%;top:50%;transform:translate(-50%,-50%);width:min(320px,88vw);background:#111827;border:1px solid #475569;border-radius:16px;padding:14px;box-shadow:0 20px 60px rgba(0,0,0,.65);color:#fff';menu.innerHTML=`<div style="font-weight:900;font-size:15px;margin-bottom:4px">📒 ${escapeHtml(n.title)}</div><div style="font-size:11px;color:#94a3b8;margin-bottom:12px">📅 ${dateText(n.updated)}</div><button class="btn" style="width:100%;margin:4px 0" data-act="open">📖 Megnyitás / szerkesztés</button><button class="btn" style="width:100%;margin:4px 0" data-act="share">📤 Megosztás</button><button class="btn" style="width:100%;margin:4px 0" data-act="print">🖨️ Nyomtatás</button><button class="btn" style="width:100%;margin:4px 0;background:#991b1b" data-act="delete">🗑️ Törlés</button><button class="btn" style="width:100%;margin:4px 0;background:#334155" data-act="close">✖️ Bezár</button>`;menu.addEventListener('click',e=>{const b=e.target.closest('button[data-act]');if(!b)return;const a=b.dataset.act;if(a==='open'){openSavedNote(id);menu.remove();}if(a==='share')shareSavedNote(id);if(a==='print')printSavedNote(id);if(a==='delete'){deleteSavedNote(id);menu.remove();}if(a==='close')menu.remove();});document.body.appendChild(menu);}
+function renderNotes(){const list=document.getElementById('notesList');if(!list)return;if(!notes.length){list.innerHTML='<div style="padding:14px;color:#94a3b8;border:1px dashed #475569;border-radius:10px">Még nincs mentett jegyzet. Írj a szerkesztőbe – a jegyzet automatikusan mentődik.</div>';return;}list.innerHTML=notes.map(n=>`<div class="note saved-note" data-id="${n.id}" style="border-left:4px solid #8b7fe8;touch-action:manipulation"><div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start"><div><b>${escapeHtml(n.title)}</b><div style="font-size:11px;opacity:.7;margin-top:3px">📅 ${dateText(n.updated)}</div></div><button class="btn" style="margin:0;padding:5px 8px" onclick="showNoteActions(${n.id})">⋮</button></div><div style="font-size:11px;opacity:.72;margin-top:6px">${escapeHtml(notePlainText(n.content).slice(0,90))}</div></div>`).join('');}
+let notePressTimer=null;
+document.addEventListener('pointerdown',e=>{const el=e.target.closest('.saved-note');if(!el||e.target.closest('button'))return;clearTimeout(notePressTimer);notePressTimer=setTimeout(()=>showNoteActions(el.dataset.id),550);});
+document.addEventListener('pointerup',()=>clearTimeout(notePressTimer));document.addEventListener('pointercancel',()=>clearTimeout(notePressTimer));
+renderNotes();
+setTimeout(()=>{const c=getGitHubConfig();if(c){const box=document.getElementById('githubSettings');if(box)box.style.display='none';startGitHubPolling();loadFromGitHub(false);}},700);
+
+// FIX MENU & KOCKA - biztos működés
+// Törlés mód - ha véletlenül beszúrtál képet/rubrikát
+window.addEventListener('keydown', (e)=>{
+  if(e.key==='Delete' || e.key==='Backspace'){
+    const sel=window.getSelection();
+    if(sel.rangeCount>0){
+      const node=sel.anchorNode;
+      const rubBox=node?.parentElement?.closest?.('.rubrika-box') || node?.closest?.('.rubrika-box');
+      if(rubBox){ e.preventDefault(); deleteRubrika(rubBox.id); }
+    }
+  }
+});
+setTimeout(()=>{
+  const btn=document.getElementById('menuBtn');
+  if(btn){ btn.onclick=toggleMenu; }
+  const cw=document.getElementById('cubeWrap');
+  if(cw){ cw.onclick=toggleMenu; }
+  const cube=document.getElementById('cube');
+  if(cube){ cube.onclick=(e)=>{ e.stopPropagation(); toggleMenu(); }; }
+  console.log('V26 fix betöltve - menü és kocka működik');
+},500);
+</script>
+<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script><script id="bible-reference-engine-init">
+window.addEventListener('DOMContentLoaded',()=>{setTimeout(installBibleReferenceEngine,50);});
+</script>
+</body>
+</html>
+
+
+// GitHub szinkron indítása az oldal betöltése után is.
+setTimeout(()=>{try{if(getGitHubConfig()){startGitHubPolling();loadFromGitHub(false);}}catch(e){console.warn('GitHub indulási szinkron:',e);}},900);
