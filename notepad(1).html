@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>notepad</title>
+</head>
+<style type="text/css">
+ol,ul{
+display:block;
+list-style-type:none;
+margin:3px;
+}
+</style><body>
+<div>&lt;!DOCTYPE html&gt;<br>
+&lt;html lang="hu"&gt;<br>
+&lt;head&gt;<br>
+&lt;meta charset="UTF-8" /&gt;<br>
+&lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;<br>
+&lt;title&gt;Ultra-G AI - Gabriela&lt;/title&gt;<br>
+&lt;style&gt;<br>
+:root{--bg:#f7f7fb;--panel:#fff;--text:#1a1a1a;--muted:#6b7280;--border:#e5e7eb;--primary:#6d28d9;--primary-contrast:#fff;--user-bubble:#eef2ff;--assistant-bubble:#f3f4f6;--accent:#10b981}<br>
+[data-theme="dark"]{--bg:#0b0b0f;--panel:#121218;--text:#e5e7eb;--muted:#9ca3af;--border:#27272f;--primary:#a78bfa;--primary-contrast:#0b0b0f;--user-bubble:#1f1b33;--assistant-bubble:#1a1a22;--accent:#34d399}<br>
+*{box-sizing:border-box}html,body{height:100%;margin:0;font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text)}<br>
+.app{height:100%;display:grid;grid-template-rows:auto 1fr auto auto}<br>
+.header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--panel);border-bottom:1px solid var(--border)}<br>
+.brand{display:flex;align-items:center;gap:10px;font-weight:700}<br>
+.brand .logo{width:28px;height:28px;border-radius:6px;background:conic-gradient(from 0deg,#7c3aed,#22d3ee,#f472b6,#7c3aed);animation:spin 6s linear infinite}<br>
+@keyframes spin{to{transform:rotate(360deg)}}<br>
+.brand .title{font-size:15px}.brand .subtitle{font-size:12px;color:var(--muted);margin-left:6px}<br>
+.header-actions{display:flex;gap:8px}<br>
+.icon-btn{appearance:none;border:1px solid var(--border);background:var(--panel);color:var(--text);border-radius:8px;padding:6px 8px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}<br>
+.chat{padding:16px;overflow:auto;display:flex;flex-direction:column;gap:14px}<br>
+.message{max-width:min(720px,92%);display:grid;grid-template-columns:32px 1fr;gap:8px;align-items:start}<br>
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--primary);color:var(--primary-contrast);display:grid;place-items:center;font-size:16px;font-weight:700}<br>
+.bubble{background:var(--assistant-bubble);border:1px solid var(--border);border-radius:12px;padding:10px 12px;line-height:1.45;white-space:pre-wrap;word-wrap:break-word}<br>
+.message.user{justify-self:end;grid-template-columns:1fr 32px}<br>
+.message.user .avatar{grid-column:2;background:var(--accent);color:#fff}<br>
+.message.user .bubble{background:var(--user-bubble);justify-self:end}<br>
+.message .meta{font-size:11px;color:var(--muted);margin-top:4px}<br>
+.message .actions{display:flex;gap:6px;margin-top:6px}<br>
+.mini-btn{appearance:none;border:1px solid var(--border);background:var(--panel);color:var(--text);border-radius:6px;padding:3px 6px;font-size:11px;cursor:pointer}<br>
+.input-area{border-top:1px solid var(--border);background:var(--panel);padding:10px 12px;display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center}<br>
+.text-input{width:100%;border:1px solid var(--border);background:var(--bg);color:var(--text);border-radius:10px;padding:10px 12px;font-size:14px;resize:none;max-height:160px;min-height:44px}<br>
+.send-btn,.mic-btn,.attach-btn{appearance:none;border:1px solid var(--border);background:var(--primary);color:var(--primary-contrast);border-radius:10px;padding:0 14px;height:44px;font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}<br>
+.send-btn:disabled,.mic-btn:disabled,.attach-btn:disabled{opacity:0.6;cursor:not-allowed}<br>
+.mic-btn.listening{background:#ef4444;color:#fff;animation:pulse 1.2s ease-in-out infinite}<br>
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}<br>
+.quick-actions{display:flex;gap:8px;flex-wrap:wrap;padding:10px 12px;background:var(--panel);border-top:1px solid var(--border)}<br>
+.action-chip{appearance:none;border:1px solid var(--border);background:var(--bg);color:var(--text);border-radius:999px;padding:6px 10px;font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}<br>
+.settings-panel{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;place-items:center;z-index:20}<br>
+.settings-panel.open{display:grid}<br>
+.settings-box{background:var(--panel);border:1px solid var(--border);border-radius:12px;width:min(460px,92%);max-height:85vh;overflow:auto;padding:14px}<br>
+.settings-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}<br>
+.settings-title{font-weight:700;font-size:16px}<br>
+.close-btn{appearance:none;border:none;background:transparent;color:var(--muted);font-size:18px;cursor:pointer}<br>
+.setting-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--border)}<br>
+.setting-row:last-child{border-bottom:none}<br>
+.setting-label{font-size:13px}<br>
+.toggle{appearance:none;width:44px;height:26px;border-radius:999px;background:var(--border);position:relative;cursor:pointer}<br>
+.toggle::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform 0.2s}<br>
+.toggle:checked{background:var(--primary)}<br>
+.toggle:checked::after{transform:translateX(18px)}<br>
+input[type="text"],input[type="password"],select,textarea.config-text{width:100%;border:1px solid var(--border);background:var(--bg);color:var(--text);border-radius:8px;padding:6px 8px;font-size:13px}<br>
+.loading-dots{display:inline-flex;gap:4px;align-items:center}<br>
+.loading-dots span{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:bounce 1s infinite}<br>
+.loading-dots span:nth-child(2){animation-delay:0.15s}<br>
+.loading-dots span:nth-child(3){animation-delay:0.3s}<br>
+@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-4px)}}<br>
+.file-preview{display:flex;gap:8px;flex-wrap:wrap;padding:8px 12px;background:var(--panel);border-top:1px solid var(--border)}<br>
+.file-chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);border-radius:999px;padding:4px 8px;font-size:11px}<br>
+.file-chip .remove{cursor:pointer;opacity:0.7}<br>
+.file-chip .remove:hover{opacity:1}<br>
+@media(max-width:520px){.brand .subtitle{display:none}.input-area{grid-template-columns:1fr auto}.mic-btn{display:none}}<br>
+&lt;/style&gt;<br>
+&lt;/head&gt;<br>
+&lt;body&gt;<br>
+&lt;div class="app" id="app" data-theme="light"&gt;<br>
+&nbsp; &lt;header class="header"&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;div class="brand"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;div class="logo"&gt;&lt;/div&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;div&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;div class="title"&gt;Ultra-G AI&lt;/div&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;div class="subtitle"&gt;Gabriela &#8226; szem&#233;lyes asszisztens&lt;/div&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/div&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;/div&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;div class="header-actions"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;button class="icon-btn" id="newChatBtn"&gt;&#10133; &#218;j&lt;/button&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;button class="icon-btn" id="themeBtn"&gt;&#127769; T&#233;ma&lt;/button&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;button class="icon-btn" id="settingsBtn"&gt;&#9881;&#65039;&lt;/button&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;/div&gt;<br>
+&nbsp; &lt;/header&gt;<br>
+&nbsp; &lt;main class="chat" id="chat"&gt;&lt;/main&gt;<br>
+&nbsp; &lt;div class="quick-actions"&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;button class="action-chip" data-action="help"&gt;&#129504; Seg&#237;ts&#233;g&lt;/button&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;button class="action-chip" data-action="analyze"&gt;&#128270; Elemz&#233;s&lt;/button&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;button class="action-chip" data-action="plan"&gt;&#128203; Terv&lt;/button&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;button class="action-chip" data-action="write"&gt;&#9997;&#65039; &#205;r&#225;s&lt;/button&gt;<br>
+&nbsp; &lt;/div&gt;<br>
+&nbsp; &lt;div class="file-preview" id="filePreview" style="display:none;"&gt;&lt;/div&gt;<br>
+&nbsp; &lt;div class="input-area"&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;textarea id="userInput" class="text-input" placeholder="&#205;rj ide&#8230;" rows="1"&gt;&lt;/textarea&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;input type="file" id="fileInput" multiple style="display:none;"&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;button class="attach-btn" id="attachBtn"&gt;&#128206;&lt;/button&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;button class="mic-btn" id="micBtn"&gt;&#127908;&lt;/button&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;button class="send-btn" id="sendBtn"&gt;K&#252;ld&#233;s &#10148;&lt;/button&gt;<br>
+&nbsp; &lt;/div&gt;<br>
+&lt;/div&gt;<br>
+&lt;div class="settings-panel" id="settingsPanel"&gt;<br>
+&nbsp; &lt;div class="settings-box"&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;div class="settings-header"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;div class="settings-title"&gt;Be&#225;ll&#237;t&#225;sok&lt;/div&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;button class="close-btn" id="closeSettings"&gt;&#10005;&lt;/button&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;/div&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;div class="setting-row"&gt;&lt;div class="setting-label"&gt;S&#246;t&#233;t t&#233;ma&lt;/div&gt;&lt;input type="checkbox" class="toggle" id="darkToggle"&gt;&lt;/div&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;div class="setting-row"&gt;&lt;div class="setting-label"&gt;Besz&#233;lget&#233;sek ment&#233;se&lt;/div&gt;&lt;input type="checkbox" class="toggle" id="saveToggle" checked&gt;&lt;/div&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;div class="setting-row"&gt;&lt;div class="setting-label"&gt;Hangalap&#250; v&#225;lasz&lt;/div&gt;&lt;input type="checkbox" class="toggle" id="ttsToggle"&gt;&lt;/div&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;div class="setting-row"&gt;&lt;div class="setting-label"&gt;St&#237;lus&lt;/div&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;select id="styleSelect"&gt;&lt;option value="concise"&gt;T&#246;m&#246;r&lt;/option&gt;&lt;option value="detailed" selected&gt;R&#233;szletes&lt;/option&gt;&lt;/select&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;/div&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;div class="setting-row"&gt;&lt;div class="setting-label"&gt;API kulcs&lt;/div&gt;&lt;input type="password" id="apiKeyInput" placeholder="sk-..."&gt;&lt;/div&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;div class="setting-row"&gt;&lt;div class="setting-label"&gt;API endpoint&lt;/div&gt;&lt;input type="text" id="apiEndpointInput" placeholder="https://api.openai.com/v1/chat/completions"&gt;&lt;/div&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;div class="setting-row"&gt;&lt;div class="setting-label"&gt;Modell&lt;/div&gt;&lt;input type="text" id="apiModelInput" placeholder="gpt-4o-mini"&gt;&lt;/div&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;div class="setting-row"&gt;&lt;div class="setting-label"&gt;Rendszer&#252;zenet&lt;/div&gt;&lt;textarea id="systemPromptInput" class="config-text" rows="4"&gt;&lt;/textarea&gt;&lt;/div&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;button class="icon-btn" id="exportBtn"&gt;&#128228; Export&lt;/button&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;button class="icon-btn" id="importBtn"&gt;&#128229; Import&lt;/button&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;input type="file" id="importFile" style="display:none;" accept=".json"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;button class="icon-btn" id="clearBtn"&gt;&#128465;&#65039; T&#246;rl&#233;s&lt;/button&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;/div&gt;<br>
+&nbsp; &lt;/div&gt;<br>
+&lt;/div&gt;<br>
+&lt;script&gt;<br>
+const DEFAULT_API_KEY="IDE_M&#193;SOLD_BE_A_SA J&#193;T_API_KULCSODAT";<br>
+const state={messages:[],theme:"light",saveChats:true,tts:false,style:"detailed",isListening:false,recognition:null,apiKey:DEFAULT_API_KEY&amp;&amp;DEFAULT_API_KEY!=="IDE_M&#193;SOLD_BE_A_SA J&#193;T_API_KULCSODAT"?DEFAULT_API_KEY:"",apiEndpoint:"https://api.openai.com/v1/chat/completions",apiModel:"gpt-4o-mini",systemPrompt:`Te Gabriela vagy, az Ultra-G AI szem&#233;lyes asszisztense. Mindig magyarul v&#225;laszolj. Adj vil&#225;gos, struktur&#225;lt v&#225;laszt. Ne &#225;ll&#237;ts bizonytalant t&#233;nyk&#233;nt.`,attachedFiles:[]};<br>
+const app=document.getElementById("app"),chat=document.getElementById("chat"),userInput=document.getElementById("userInput"),sendBtn=document.getElementById("sendBtn"),micBtn=document.getElementById("micBtn"),attachBtn=document.getElementById("attachBtn"),fileInput=document.getElementById("fileInput"),filePreview=document.getElementById("filePreview"),newChatBtn=document.getElementById("newChatBtn"),themeBtn=document.getElementById("themeBtn"),settingsBtn=document.getElementById("settingsBtn"),settingsPanel=document.getElementById("settingsPanel"),closeSettings=document.getElementById("closeSettings"),darkToggle=document.getElementById("darkToggle"),saveToggle=document.getElementById("saveToggle"),ttsToggle=document.getElementById("ttsToggle"),styleSelect=document.getElementById("styleSelect"),apiKeyInput=document.getElementById("apiKeyInput"),apiEndpointInput=document.getElementById("apiEndpointInput"),apiModelInput=document.getElementById("apiModelInput"),systemPromptInput=document.getElementById("systemPromptInput"),exportBtn=document.getElementById("exportBtn"),importBtn=document.getElementById("importBtn"),importFile=document.getElementById("importFile"),clearBtn=document.getElementById("clearBtn"),quickActions=document.querySelectorAll(".action-chip");<br>
+function saveState(){if(!state.saveChats)return;localStorage.setItem("ultra-g-state",JSON.stringify(state))}<br>
+function loadState(){const r=localStorage.getItem("ultra-g-state");if(!r)return;try{const p=JSON.parse(r);if(Array.isArray(p.messages))state.messages=p.messages;if(p.theme)state.theme=p.theme;if(typeof p.saveChats==="boolean")state.saveChats=p.saveChats;if(typeof p.tts==="boolean")state.tts=p.tts;if(p.style)state.style=p.style;if(p.apiKey)state.apiKey=p.apiKey;if(p.apiEndpoint)state.apiEndpoint=p.apiEndpoint;if(p.apiModel)state.apiModel=p.apiModel;if(p.systemPrompt)state.systemPrompt=p.systemPrompt}catch{}}<br>
+function setTheme(t){state.theme=t;app.setAttribute("data-theme",t);themeBtn.textContent=t==="dark"?"&#9728;&#65039; T&#233;ma":"&#127769; T&#233;ma";darkToggle.checked=t==="dark";saveState()}<br>
+function renderMessages(){chat.innerHTML="";state.messages.forEach((m,idx)=&gt;{const msgEl=document.createElement("div");msgEl.className="message"+(m.role==="user"?" user":"");const avatar=document.createElement("div");avatar.className="avatar";avatar.textContent=m.role==="user"?"Te":"G";const bubble=document.createElement("div");bubble.className="bubble";bubble.textContent=m.content;const meta=document.createElement("div");meta.className="meta";const time=new Date(m.timestamp).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});meta.textContent=m.role==="user"?`Te &#8226; ${time}`:`Gabriela &#8226; ${time}`;const actions=document.createElement("div");actions.className="actions";const copyBtn=document.createElement("button");copyBtn.className="mini-btn";copyBtn.textContent="M&#225;sol&#225;s";copyBtn.onclick=()=&gt;navigator.clipboard.writeText(m.content);const regenBtn=document.createElement("button");regenBtn.className="mini-btn";regenBtn.textContent="&#218;jragener&#225;l&#225;s";regenBtn.style.display=m.role==="assistant"?"inline-flex":"none";regenBtn.onclick=()=&gt;regenerateAssistantMessage(idx);actions.appendChild(copyBtn);if(m.role==="assistant")actions.appendChild(regenBtn);const rightCol=document.createElement("div");rightCol.style.display="grid";rightCol.style.gap="4px";rightCol.appendChild(bubble);rightCol.appendChild(meta);rightCol.appendChild(actions);if(m.role==="user"){msgEl.appendChild(rightCol);msgEl.appendChild(avatar)}else{msgEl.appendChild(avatar);msgEl.appendChild(rightCol)}chat.appendChild(msgEl)});chat.scrollTop=chat.scrollHeight}<br>
+function addMessage(role,content){state.messages.push({role,content,timestamp:Date.now()});renderMessages();saveState()}<br>
+function showTypingIndicator(){const msgEl=document.createElement("div");msgEl.className="message";msgEl.id="typingIndicator";const avatar=document.createElement("div");avatar.className="avatar";avatar.textContent="G";const bubble=document.createElement("div");bubble.className="bubble";const dots=document.createElement("span");dots.className="loading-dots";dots.innerHTML="&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;";bubble.appendChild(dots);msgEl.appendChild(avatar);msgEl.appendChild(bubble);chat.appendChild(msgEl);chat.scrollTop=chat.scrollHeight}<br>
+function removeTypingIndicator(){const el=document.getElementById("typingIndicator");if(el)el.remove()}<br>
+function renderFilePreview(){if(state.attachedFiles.length===0){filePreview.style.display="none";filePreview.innerHTML="";return}filePreview.style.display="flex";filePreview.innerHTML="";state.attachedFiles.forEach((f,idx)=&gt;{const chip=document.createElement("div");chip.className="file-chip";const name=document.createElement("span");name.textContent=f.name;const remove=document.createElement("span");remove.className="remove";remove.textContent="&#10005;";remove.onclick=()=&gt;{state.attachedFiles.splice(idx,1);renderFilePreview()};chip.appendChild(name);chip.appendChild(remove);filePreview.appendChild(chip)})}<br>
+async function readFiles(files){const result=[];for(const file of files){const isText=file.type.startsWith("text/")||file.name.endsWith(".md")||file.name.endsWith(".txt");const isImage=file.type.startsWith("image/");if(isText){const text=await file.text();result.push({name:file.name,type:"text",content:text})}else if(isImage){const base64=await fileToBase64(file);result.push({name:file.name,type:"image",content:base64})}else{const text=await file.text().catch(()=&gt;"[Nem olvashat&#243;]");result.push({name:file.name,type:"text",content:text})}}return result}<br>
+function fileToBase64(file){return new Promise((resolve,reject)=&gt;{const reader=new FileReader();reader.onload=()=&gt;resolve(reader.result);reader.onerror=reject;reader.readAsDataURL(file)})}<br>
+attachBtn.addEventListener("click",()=&gt;fileInput.click());fileInput.addEventListener("change",async(e)=&gt;{const files=Array.from(e.target.files||[]);if(files.length===0)return;const newFiles=await readFiles(files);state.attachedFiles.push(...newFiles);renderFilePreview();fileInput.value=""});<br>
+async function callAI(userText){const{apiKey,apiEndpoint,apiModel,systemPrompt}=state;const messages=[{role:"system",content:systemPrompt}];const history=state.messages.slice(-20);for(const m of his</div>
+</body>
+</html>
